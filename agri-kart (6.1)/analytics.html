@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics | Agri-Kart Seller</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-30 hidden w-64 border-r bg-background md:flex md:flex-col">
+      <div class="flex h-16 items-center border-b px-6">
+        <a href="dashboard.html" class="flex items-center gap-2 font-bold text-primary">
+          <i class="ri-store-2-line h-6 w-6"></i>
+          <span>Agri-Kart Seller</span>
+        </a>
+      </div>
+
+      <nav class="flex-1 space-y-1 p-4">
+        <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-dashboard-line h-5 w-5"></i>
+          Dashboard
+        </a>
+        <a href="products.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-shopping-bag-line h-5 w-5"></i>
+          Products
+        </a>
+        <a href="orders.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-shopping-cart-line h-5 w-5"></i>
+          Orders
+        </a>
+        <a href="analytics.html" class="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
+          <i class="ri-line-chart-line h-5 w-5"></i>
+          Analytics
+        </a>
+      </nav>
+
+      <div class="border-t p-4">
+        <button id="logout-button" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-logout-box-line h-5 w-5"></i>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 md:ml-64">
+      <header class="border-b">
+        <div class="flex h-16 items-center px-4 md:px-6">
+          <h1 class="text-lg font-semibold md:text-2xl">Analytics</h1>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Date range selector -->
+        <div class="mb-6">
+          <select id="date-range" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last year</option>
+          </select>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-lg border p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium">Total Revenue</p>
+              <i class="ri-money-dollar-circle-line h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <p class="mt-2 text-2xl font-bold">₱45,250</p>
+            <p class="mt-1 flex items-center text-xs text-muted-foreground">
+              <i class="ri-arrow-up-line mr-1 h-3 w-3 text-green-500"></i>
+              +12.5% from previous period
+            </p>
+          </div>
+
+          <div class="rounded-lg border p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium">Total Orders</p>
+              <i class="ri-shopping-cart-line h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <p class="mt-2 text-2xl font-bold">124</p>
+            <p class="mt-1 flex items-center text-xs text-muted-foreground">
+              <i class="ri-arrow-up-line mr-1 h-3 w-3 text-green-500"></i>
+              +8.2% from previous period
+            </p>
+          </div>
+
+          <div class="rounded-lg border p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium">Average Order Value</p>
+              <i class="ri-coins-line h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <p class="mt-2 text-2xl font-bold">₱365</p>
+            <p class="mt-1 flex items-center text-xs text-muted-foreground">
+              <i class="ri-arrow-up-line mr-1 h-3 w-3 text-green-500"></i>
+              +4.1% from previous period
+            </p>
+          </div>
+
+          <div class="rounded-lg border p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium">Total Customers</p>
+              <i class="ri-user-line h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <p class="mt-2 text-2xl font-bold">89</p>
+            <p class="mt-1 flex items-center text-xs text-muted-foreground">
+              <i class="ri-arrow-up-line mr-1 h-3 w-3 text-green-500"></i>
+              +14.6% from previous period
+            </p>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <!-- Revenue Chart -->
+          <div class="rounded-lg border">
+            <div class="border-b p-4">
+              <h2 class="font-semibold">Revenue Over Time</h2>
+              <p class="text-sm text-muted-foreground">Daily revenue for the selected period</p>
+            </div>
+            <div class="p-4">
+              <canvas id="revenue-chart" height="300"></canvas>
+            </div>
+          </div>
+
+          <!-- Orders Chart -->
+          <div class="rounded-lg border">
+            <div class="border-b p-4">
+              <h2 class="font-semibold">Orders Over Time</h2>
+              <p class="text-sm text-muted-foreground">Daily orders for the selected period</p>
+            </div>
+            <div class="p-4">
+              <canvas id="orders-chart" height="300"></canvas>
+            </div>
+          </div>
+
+          <!-- Product Performance -->
+          <div class="rounded-lg border">
+            <div class="border-b p-4">
+              <h2 class="font-semibold">Top Products</h2>
+              <p class="text-sm text-muted-foreground">Best selling products by revenue</p>
+            </div>
+            <div class="p-4">
+              <canvas id="products-chart" height="300"></canvas>
+            </div>
+          </div>
+
+          <!-- Customer Demographics -->
+          <div class="rounded-lg border">
+            <div class="border-b p-4">
+              <h2 class="font-semibold">Customer Demographics</h2>
+              <p class="text-sm text-muted-foreground">Distribution of customer locations</p>
+            </div>
+            <div class="p-4">
+              <canvas id="demographics-chart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication
+      if (!auth.requireSellerAuth()) {
+        return;
+      }
+
+      // Load header
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+
+      // Handle logout
+      document.getElementById('logout-button').addEventListener('click', function() {
+        auth.logout();
+      });
+
+      // Initialize analytics data
+      initializeAnalytics();
+
+      // Handle date range changes
+      document.getElementById('date-range').addEventListener('change', function() {
+        updateAnalytics(this.value);
+      });
+    });
+
+    // Sample data generator - In a real app, this would be replaced with API calls
+    function generateData(days) {
+      const data = {
+        revenue: [],
+        orders: [],
+        dates: [],
+        stats: {
+          totalRevenue: 0,
+          totalOrders: 0,
+          averageOrderValue: 0,
+          totalCustomers: 0,
+          revenueGrowth: 0,
+          ordersGrowth: 0,
+          avgOrderGrowth: 0,
+          customersGrowth: 0
+        },
+        products: {
+          labels: ['Organic Rice', 'Fresh Mangoes', 'Tomatoes', 'Sweet Potatoes', 'Others'],
+          data: [],
+          totalRevenue: {} // Track revenue per product
+        },
+        demographics: {
+          labels: ['Manila', 'Quezon City', 'Makati', 'Pasig', 'Others'],
+          data: [],
+          totalOrders: {} // Track orders per location
+        }
+      };
+
+      // Initialize product revenue and demographics counters
+      data.products.labels.forEach(product => {
+        data.products.totalRevenue[product] = 0;
+      });
+      data.demographics.labels.forEach(location => {
+        data.demographics.totalOrders[location] = 0;
+      });
+
+      // Generate daily data
+      const today = new Date();
+      let totalRevenuePrev = 0;
+      let totalOrdersPrev = 0;
+
+      for (let i = days; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        data.dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        
+        // Generate random daily revenue between 3000 and 8000
+        const dailyRevenue = Math.floor(Math.random() * 5000) + 3000;
+        data.revenue.push(dailyRevenue);
+        data.stats.totalRevenue += dailyRevenue;
+
+        // Generate random daily orders between 8 and 25
+        const dailyOrders = Math.floor(Math.random() * 17) + 8;
+        data.orders.push(dailyOrders);
+        data.stats.totalOrders += dailyOrders;
+
+        // Distribute daily revenue across products
+        data.products.labels.forEach(product => {
+          // Generate random revenue for each product
+          const productRevenue = Math.floor(Math.random() * (dailyRevenue * 0.4)); // Up to 40% of daily revenue
+          data.products.totalRevenue[product] += productRevenue;
+        });
+
+        // Distribute daily orders across locations
+        data.demographics.labels.forEach(location => {
+          // Generate random orders for each location
+          const locationOrders = Math.floor(Math.random() * (dailyOrders * 0.4)); // Up to 40% of daily orders
+          data.demographics.totalOrders[location] += locationOrders;
+        });
+
+        // Calculate previous period data for first half of the range
+        if (i >= days/2) {
+          totalRevenuePrev += dailyRevenue;
+          totalOrdersPrev += dailyOrders;
+        }
+      }
+
+      // Calculate averages and growth
+      data.stats.averageOrderValue = Math.round(data.stats.totalRevenue / data.stats.totalOrders);
+      data.stats.totalCustomers = Math.round(data.stats.totalOrders * 0.7); // Assume 70% unique customers
+
+      // Calculate growth percentages
+      const currentRevenue = data.stats.totalRevenue - totalRevenuePrev;
+      data.stats.revenueGrowth = ((currentRevenue - totalRevenuePrev) / totalRevenuePrev * 100).toFixed(1);
+      
+      const currentOrders = data.stats.totalOrders - totalOrdersPrev;
+      data.stats.ordersGrowth = ((currentOrders - totalOrdersPrev) / totalOrdersPrev * 100).toFixed(1);
+      
+      const currentAvg = data.stats.averageOrderValue;
+      const prevAvg = totalRevenuePrev / totalOrdersPrev;
+      data.stats.avgOrderGrowth = ((currentAvg - prevAvg) / prevAvg * 100).toFixed(1);
+      
+      const currentCustomers = Math.round(currentOrders * 0.7);
+      const prevCustomers = Math.round(totalOrdersPrev * 0.7);
+      data.stats.customersGrowth = ((currentCustomers - prevCustomers) / prevCustomers * 100).toFixed(1);
+
+      // Convert product revenue totals to percentages for the chart
+      const totalProductRevenue = Object.values(data.products.totalRevenue).reduce((a, b) => a + b, 0);
+      data.products.data = data.products.labels.map(product => 
+        Math.round((data.products.totalRevenue[product] / totalProductRevenue) * 100)
+      );
+
+      // Convert demographics order totals to percentages for the chart
+      const totalLocationOrders = Object.values(data.demographics.totalOrders).reduce((a, b) => a + b, 0);
+      data.demographics.data = data.demographics.labels.map(location => 
+        Math.round((data.demographics.totalOrders[location] / totalLocationOrders) * 100)
+      );
+
+      return data;
+    }
+
+    let charts = {};
+
+    function initializeAnalytics() {
+      // Get initial data for 30 days
+      updateAnalytics(30);
+    }
+
+    function updateAnalytics(days) {
+      const data = generateData(parseInt(days));
+      updateStats(data.stats);
+      updateCharts(data);
+    }
+
+    function updateStats(stats) {
+      // Update stats cards
+      document.querySelector('.grid.gap-4.md\\:grid-cols-2.lg\\:grid-cols-4').innerHTML = `
+        <div class="rounded-lg border p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium">Total Revenue</p>
+            <i class="ri-money-dollar-circle-line h-4 w-4 text-muted-foreground"></i>
+          </div>
+          <p class="mt-2 text-2xl font-bold">₱${stats.totalRevenue.toLocaleString()}</p>
+          <p class="mt-1 flex items-center text-xs text-muted-foreground">
+            <i class="ri-arrow-${stats.revenueGrowth >= 0 ? 'up' : 'down'}-line mr-1 h-3 w-3 ${stats.revenueGrowth >= 0 ? 'text-green-500' : 'text-red-500'}"></i>
+            ${Math.abs(stats.revenueGrowth)}% from previous period
+          </p>
+        </div>
+
+        <div class="rounded-lg border p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium">Total Orders</p>
+            <i class="ri-shopping-cart-line h-4 w-4 text-muted-foreground"></i>
+          </div>
+          <p class="mt-2 text-2xl font-bold">${stats.totalOrders.toLocaleString()}</p>
+          <p class="mt-1 flex items-center text-xs text-muted-foreground">
+            <i class="ri-arrow-${stats.ordersGrowth >= 0 ? 'up' : 'down'}-line mr-1 h-3 w-3 ${stats.ordersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}"></i>
+            ${Math.abs(stats.ordersGrowth)}% from previous period
+          </p>
+        </div>
+
+        <div class="rounded-lg border p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium">Average Order Value</p>
+            <i class="ri-coins-line h-4 w-4 text-muted-foreground"></i>
+          </div>
+          <p class="mt-2 text-2xl font-bold">₱${stats.averageOrderValue.toLocaleString()}</p>
+          <p class="mt-1 flex items-center text-xs text-muted-foreground">
+            <i class="ri-arrow-${stats.avgOrderGrowth >= 0 ? 'up' : 'down'}-line mr-1 h-3 w-3 ${stats.avgOrderGrowth >= 0 ? 'text-green-500' : 'text-red-500'}"></i>
+            ${Math.abs(stats.avgOrderGrowth)}% from previous period
+          </p>
+        </div>
+
+        <div class="rounded-lg border p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium">Total Customers</p>
+            <i class="ri-user-line h-4 w-4 text-muted-foreground"></i>
+          </div>
+          <p class="mt-2 text-2xl font-bold">${stats.totalCustomers.toLocaleString()}</p>
+          <p class="mt-1 flex items-center text-xs text-muted-foreground">
+            <i class="ri-arrow-${stats.customersGrowth >= 0 ? 'up' : 'down'}-line mr-1 h-3 w-3 ${stats.customersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}"></i>
+            ${Math.abs(stats.customersGrowth)}% from previous period
+          </p>
+        </div>
+      `;
+    }
+
+    function updateCharts(data) {
+      // Destroy existing charts if they exist
+      Object.values(charts).forEach(chart => chart.destroy());
+
+      // Revenue Chart
+      const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+      charts.revenue = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+          labels: data.dates,
+          datasets: [{
+            label: 'Revenue',
+            data: data.revenue,
+            borderColor: 'rgb(34, 197, 94)',
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+      // Orders Chart
+      const ordersCtx = document.getElementById('orders-chart').getContext('2d');
+      charts.orders = new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+          labels: data.dates,
+          datasets: [{
+            label: 'Orders',
+            data: data.orders,
+            backgroundColor: 'rgba(34, 197, 94, 0.2)',
+            borderColor: 'rgb(34, 197, 94)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+      // Products Chart
+      const productsCtx = document.getElementById('products-chart').getContext('2d');
+      charts.products = new Chart(productsCtx, {
+        type: 'doughnut',
+        data: {
+          labels: data.products.labels,
+          datasets: [{
+            data: data.products.data,
+            backgroundColor: [
+              'rgba(34, 197, 94, 0.8)',
+              'rgba(34, 197, 94, 0.6)',
+              'rgba(34, 197, 94, 0.4)',
+              'rgba(34, 197, 94, 0.2)',
+              'rgba(34, 197, 94, 0.1)'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+      // Demographics Chart
+      const demographicsCtx = document.getElementById('demographics-chart').getContext('2d');
+      charts.demographics = new Chart(demographicsCtx, {
+        type: 'pie',
+        data: {
+          labels: data.demographics.labels,
+          datasets: [{
+            data: data.demographics.data,
+            backgroundColor: [
+              'rgba(34, 197, 94, 0.8)',
+              'rgba(34, 197, 94, 0.6)',
+              'rgba(34, 197, 94, 0.4)',
+              'rgba(34, 197, 94, 0.2)',
+              'rgba(34, 197, 94, 0.1)'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+  </script>
+</body>
+</html> 

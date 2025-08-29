@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agri-Kart | Farm-to-Doorstep Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <!-- Hero Carousel -->
+    <div class="relative h-[500px] md:h-[600px] overflow-hidden" id="hero-carousel">
+      <!-- Carousel slides will be inserted here by JavaScript -->
+    </div>
+
+    <!-- On Sale Section -->
+    <section class="py-12 md:py-16">
+      <div class="container">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold sm:text-3xl">On Sale</h2>
+          <a href="market.html" class="flex items-center text-primary hover:underline">
+            View All <i class="ri-arrow-right-line ml-1 h-4 w-4"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" id="featured-products">
+          <!-- Featured products will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- On Hand Section -->
+    <section class="py-12 md:py-16 bg-muted">
+      <div class="container">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold sm:text-3xl">Fresh Harvest</h2>
+          <a href="market.html" class="flex items-center text-primary hover:underline">
+            View All <i class="ri-arrow-right-line ml-1 h-4 w-4"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" id="on-hand-products">
+          <!-- On hand products will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-12 md:py-16">
+      <div class="container">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl font-bold sm:text-3xl md:text-4xl">How Agri-Kart Works</h2>
+          <p class="mt-4 text-muted-foreground">Simple steps to get fresh produce from farm to your doorstep</p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-3">
+          <div class="flex flex-col items-center text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <i class="ri-user-line h-8 w-8 text-2xl"></i>
+            </div>
+            <h3 class="mt-4 text-xl font-bold">Create an Account</h3>
+            <p class="mt-2 text-muted-foreground">
+              Sign up as a buyer to shop or as a seller to list your farm products.
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <i class="ri-leaf-line h-8 w-8 text-2xl"></i>
+            </div>
+            <h3 class="mt-4 text-xl font-bold">Browse & Shop</h3>
+            <p class="mt-2 text-muted-foreground">
+              Explore our marketplace for fresh, locally-grown produce and add items to your cart.
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <i class="ri-truck-line h-8 w-8 text-2xl"></i>
+            </div>
+            <h3 class="mt-4 text-xl font-bold">Fast Delivery</h3>
+            <p class="mt-2 text-muted-foreground">
+              Receive your order quickly with our optimized farm-to-doorstep logistics.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="auth.html">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+              Get Started
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Join Community Section -->
+    <section class="py-12 md:py-16 bg-primary text-primary-foreground">
+      <div class="container">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-2xl font-bold sm:text-3xl md:text-4xl">Join Our Growing Community</h2>
+          <p class="mt-4">
+            Connect with local farmers and fellow food enthusiasts. Get access to exclusive deals and support
+            sustainable agriculture.
+          </p>
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <a href="auth.html">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-11 px-8">
+                Sign Up Now
+              </button>
+            </a>
+            <a href="#">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8 bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+                Learn More
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Include footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/product-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+      
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+        });
+      
+      // Hero carousel data
+      const slides = [
+        {
+          id: 1,
+          title: "Fresh From Farm to Your Doorstep",
+          description: "Experience the freshest produce delivered directly from local farmers to your home.",
+          image: "https://placeholder.pics/svg/1200x600",
+          cta: "Shop Now",
+          link: "market.html",
+        },
+        {
+          id: 2,
+          title: "Support Local Farmers",
+          description: "Every purchase helps support sustainable farming practices and local communities.",
+          image: "https://placeholder.pics/svg/1200x600",
+          cta: "Learn More",
+          link: "#",
+        },
+        {
+          id: 3,
+          title: "Organic & Sustainable",
+          description: "Discover our wide range of certified organic and sustainably grown products.",
+          image: "https://placeholder.pics/svg/1200x600",
+          cta: "Explore",
+          link: "market.html",
+        },
+      ];
+      
+      // Initialize hero carousel
+      const carouselContainer = document.getElementById('hero-carousel');
+      let currentSlide = 0;
+      
+      function renderCarousel() {
+        carouselContainer.innerHTML = '';
+        
+        slides.forEach((slide, index) => {
+          const slideElement = document.createElement('div');
+          slideElement.className = `absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'}`;
+          
+          slideElement.innerHTML = `
+            <div class="absolute inset-0 bg-black/40 z-10"></div>
+            <img src="${slide.image}" alt="${slide.title}" class="object-cover w-full h-full">
+            <div class="relative z-20 flex h-full items-center">
+              <div class="container">
+                <div class="max-w-lg space-y-4 text-white">
+                  <h1 class="text-3xl font-bold sm:text-4xl md:text-5xl">${slide.title}</h1>
+                  <p class="text-lg opacity-90">${slide.description}</p>
+                  <a href="${slide.link}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 mt-4">
+                    ${slide.cta}
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          carouselContainer.appendChild(slideElement);
+        });
+        
+        // Navigation buttons
+        const prevButton = document.createElement('button');
+        prevButton.className = 'absolute left-4 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/30 text-white hover:bg-black/50 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line h-8 w-8 text-2xl"></i><span class="sr-only">Previous slide</span>';
+        prevButton.onclick = prevSlide;
+        
+        const nextButton = document.createElement('button');
+        nextButton.className = 'absolute right-4 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/30 text-white hover:bg-black/50 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0';
+        nextButton.innerHTML = '<i class="ri-arrow-right-s-line h-8 w-8 text-2xl"></i><span class="sr-only">Next slide</span>';
+        nextButton.onclick = nextSlide;
+        
+        carouselContainer.appendChild(prevButton);
+        carouselContainer.appendChild(nextButton);
+        
+        // Indicators
+        const indicators = document.createElement('div');
+        indicators.className = 'absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 space-x-2';
+        
+        slides.forEach((_, index) => {
+          const indicator = document.createElement('button');
+          indicator.className = `h-2 w-2 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-white/50'}`;
+          indicator.onclick = () => goToSlide(index);
+          indicator.innerHTML = `<span class="sr-only">Go to slide ${index + 1}</span>`;
+          indicators.appendChild(indicator);
+        });
+        
+        carouselContainer.appendChild(indicators);
+      }
+      
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        renderCarousel();
+      }
+      
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        renderCarousel();
+      }
+      
+      function goToSlide(index) {
+        currentSlide = index;
+        renderCarousel();
+      }
+      
+      renderCarousel();
+      
+      // Auto-advance slides
+      setInterval(nextSlide, 5000);
+      
+      // Render featured products
+      const featuredProductsContainer = document.getElementById('featured-products');
+      const featuredProducts = products.slice(0, 4);
+      
+      featuredProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'group relative overflow-hidden rounded-lg border bg-background transition-all hover:shadow-md';
+        
+        productCard.innerHTML = `
+          <a href="product.html?id=${product.id}" class="block overflow-hidden">
+            <div class="aspect-square overflow-hidden">
+              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
+            </div>
+          </a>
+          <div class="p-4">
+            <a href="product.html?id=${product.id}">
+              <h3 class="font-medium">${product.name}</h3>
+            </a>
+            <p class="mt-1 text-lg font-bold">${formatCurrency(product.price)}</p>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="text-xs text-muted-foreground">${product.category}</span>
+              <button onclick="addToCart('${product.id}')" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 px-3 text-xs">
+                <i class="ri-shopping-cart-line mr-2 h-4 w-4"></i>
+                Add
+              </button>
+            </div>
+          </div>
+        `;
+        
+        featuredProductsContainer.appendChild(productCard);
+      });
+      
+      // Render on-hand products
+      const onHandProductsContainer = document.getElementById('on-hand-products');
+      const onHandProducts = products.slice(4, 8);
+      
+      onHandProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'group relative overflow-hidden rounded-lg border bg-background transition-all hover:shadow-md';
+        
+        productCard.innerHTML = `
+          <a href="product.html?id=${product.id}" class="block overflow-hidden">
+            <div class="aspect-square overflow-hidden">
+              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
+            </div>
+          </a>
+          <div class="p-4">
+            <a href="product.html?id=${product.id}">
+              <h3 class="font-medium">${product.name}</h3>
+            </a>
+            <p class="mt-1 text-lg font-bold">${formatCurrency(product.price)}</p>
+            <div class="mt-2 flex items-center justify-between">
+              <span class="text-xs text-muted-foreground">${product.category}</span>
+              <button onclick="addToCart('${product.id}')" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 px-3 text-xs">
+                <i class="ri-shopping-cart-line mr-2 h-4 w-4"></i>
+                Add
+              </button>
+            </div>
+          </div>
+        `;
+        
+        onHandProductsContainer.appendChild(productCard);
+      });
+    });
+    
+    // Add to cart function
+    function addToCart(productId) {
+      const product = getProductById(productId);
+      if (product) {
+        cart.addItem({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+          category: product.category
+        });
+      }
+    }
+  </script>
+</body>
+</html>

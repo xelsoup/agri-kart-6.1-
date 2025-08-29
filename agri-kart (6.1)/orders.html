@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | Agri-Kart Seller</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-30 hidden w-64 border-r bg-background md:flex md:flex-col">
+      <div class="flex h-16 items-center border-b px-6">
+        <a href="dashboard.html" class="flex items-center gap-2 font-bold text-primary">
+          <i class="ri-store-2-line h-6 w-6"></i>
+          <span>Agri-Kart Seller</span>
+        </a>
+      </div>
+
+      <nav class="flex-1 space-y-1 p-4">
+        <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-dashboard-line h-5 w-5"></i>
+          Dashboard
+        </a>
+        <a href="products.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-shopping-bag-line h-5 w-5"></i>
+          Products
+        </a>
+        <a href="orders.html" class="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
+          <i class="ri-shopping-cart-line h-5 w-5"></i>
+          Orders
+        </a>
+        <a href="analytics.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-line-chart-line h-5 w-5"></i>
+          Analytics
+        </a>
+      </nav>
+
+      <div class="border-t p-4">
+        <button id="logout-button" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <i class="ri-logout-box-line h-5 w-5"></i>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 md:ml-64">
+      <header class="border-b">
+        <div class="flex h-16 items-center px-4 md:px-6">
+          <h1 class="text-lg font-semibold md:text-2xl">Orders</h1>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Search and filters -->
+        <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex w-full items-center gap-4 md:w-auto">
+            <div class="relative w-full md:w-[300px]">
+              <i class="ri-search-line absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+              <input type="search" placeholder="Search orders..." class="flex h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+            </div>
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i class="ri-filter-line mr-2 h-4 w-4"></i>
+              Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Orders table -->
+        <div class="rounded-lg border">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b bg-muted/50">
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Order ID</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Date</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Items</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Total</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                  <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <!-- Orders will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div id="order-modal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-background/80 backdrop-blur-sm"></div>
+    <div class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg md:w-full">
+      <div class="flex flex-col space-y-1.5">
+        <h2 id="modal-title" class="text-lg font-semibold leading-none tracking-tight">Order Details</h2>
+        <p class="text-sm text-muted-foreground">View and update order information.</p>
+      </div>
+      <div id="order-details" class="space-y-4">
+        <!-- Order details will be populated by JavaScript -->
+      </div>
+      <div class="flex justify-end gap-4">
+        <button onclick="closeOrderModal()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+          Close
+        </button>
+        <button id="update-status-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+          Update Status
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    let orders = [
+      {
+        id: 'ORD-001',
+        customer: 'Juan Dela Cruz',
+        date: '2024-03-14',
+        total: 750,
+        items: 3,
+        status: 'Delivered',
+        products: [
+          { name: 'Organic Rice', quantity: 2, price: 250 },
+          { name: 'Fresh Mangoes', quantity: 1, price: 250 }
+        ],
+        address: '123 Main St, Manila, Philippines'
+      },
+      {
+        id: 'ORD-002',
+        customer: 'Maria Santos',
+        date: '2024-03-13',
+        total: 420,
+        items: 2,
+        status: 'Shipped',
+        products: [
+          { name: 'Tomatoes', quantity: 3, price: 80 },
+          { name: 'Fresh Mangoes', quantity: 2, price: 120 }
+        ],
+        address: '456 Oak St, Quezon City, Philippines'
+      },
+      {
+        id: 'ORD-003',
+        customer: 'Pedro Reyes',
+        date: '2024-03-12',
+        total: 1250,
+        items: 5,
+        status: 'Processing',
+        products: [
+          { name: 'Organic Rice', quantity: 5, price: 250 }
+        ],
+        address: '789 Pine St, Makati, Philippines'
+      }
+    ];
+
+    function renderOrdersTable() {
+      const ordersTableBody = document.getElementById('orders-table-body');
+      const filteredOrders = filterOrders(orders);
+      ordersTableBody.innerHTML = filteredOrders.map(order => `
+        <tr class="border-b">
+          <td class="p-4 font-medium">${order.id}</td>
+          <td class="p-4">${order.customer}</td>
+          <td class="p-4">${new Date(order.date).toLocaleDateString()}</td>
+          <td class="p-4">${order.items}</td>
+          <td class="p-4">₱${order.total.toLocaleString()}</td>
+          <td class="p-4">
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+              order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+              'bg-yellow-100 text-yellow-700'
+            }">
+              ${order.status}
+            </span>
+          </td>
+          <td class="p-4">
+            <button onclick="viewOrder('${order.id}')" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0">
+              <i class="ri-eye-line h-4 w-4"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Add these new functions for search and filter
+    let currentFilters = {
+      status: 'all',
+      searchQuery: ''
+    };
+
+    function filterOrders(orders) {
+      return orders.filter(order => {
+        // Apply search query filter
+        const searchMatch = !currentFilters.searchQuery || 
+          order.id.toLowerCase().includes(currentFilters.searchQuery.toLowerCase()) ||
+          order.customer.toLowerCase().includes(currentFilters.searchQuery.toLowerCase());
+
+        // Apply status filter
+        const statusMatch = currentFilters.status === 'all' || order.status === currentFilters.status;
+
+        return searchMatch && statusMatch;
+      });
+    }
+
+    function openFiltersModal() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50';
+      modal.innerHTML = `
+        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm"></div>
+        <div class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+          <div class="flex flex-col space-y-1.5">
+            <h2 class="text-lg font-semibold leading-none tracking-tight">Filter Orders</h2>
+            <p class="text-sm text-muted-foreground">Select filters to apply to the orders list.</p>
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none">Status</label>
+              <select id="status-filter" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <option value="all">All Statuses</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="flex justify-end gap-4">
+              <button onclick="closeFiltersModal()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                Cancel
+              </button>
+              <button onclick="applyFilters()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // Set current filter value
+      document.getElementById('status-filter').value = currentFilters.status;
+    }
+
+    function closeFiltersModal() {
+      const modal = document.querySelector('.fixed.inset-0.z-50:not(#order-modal)');
+      if (modal) {
+        modal.remove();
+      }
+    }
+
+    function applyFilters() {
+      const statusFilter = document.getElementById('status-filter').value;
+      currentFilters.status = statusFilter;
+      renderOrdersTable();
+      closeFiltersModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication
+      if (!auth.requireSellerAuth()) {
+        return;
+      }
+
+      // Load header
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+
+      // Initial render of orders table
+      renderOrdersTable();
+
+      // Handle logout
+      document.getElementById('logout-button').addEventListener('click', function() {
+        auth.logout();
+      });
+
+      // Handle update status button
+      document.getElementById('update-status-button').addEventListener('click', function() {
+        const orderId = this.dataset.orderId;
+        openUpdateStatusModal(orderId);
+      });
+
+      // Add search input handler
+      const searchInput = document.querySelector('input[type="search"]');
+      searchInput.addEventListener('input', function(e) {
+        currentFilters.searchQuery = e.target.value;
+        renderOrdersTable();
+      });
+
+      // Add filter button handler
+      const filterButton = document.querySelector('button:has(.ri-filter-line)');
+      filterButton.addEventListener('click', openFiltersModal);
+    });
+
+    function viewOrder(orderId) {
+      const modal = document.getElementById('order-modal');
+      const orderDetails = document.getElementById('order-details');
+      const updateStatusButton = document.getElementById('update-status-button');
+      
+      // Find the order
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      // Store the order ID on the update status button
+      updateStatusButton.dataset.orderId = orderId;
+      
+      orderDetails.innerHTML = `
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <p class="font-medium">Customer Information</p>
+            <div class="text-sm">
+              <p><span class="text-muted-foreground">Name:</span> ${order.customer}</p>
+              <p><span class="text-muted-foreground">Address:</span> ${order.address}</p>
+            </div>
+          </div>
+          
+          <div class="grid gap-2">
+            <p class="font-medium">Order Information</p>
+            <div class="text-sm">
+              <p><span class="text-muted-foreground">Order ID:</span> ${order.id}</p>
+              <p><span class="text-muted-foreground">Date:</span> ${new Date(order.date).toLocaleDateString()}</p>
+              <p><span class="text-muted-foreground">Status:</span> 
+                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                  order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+                  'bg-yellow-100 text-yellow-700'
+                }">
+                  ${order.status}
+                </span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="grid gap-2">
+            <p class="font-medium">Products</p>
+            <div class="space-y-2">
+              ${order.products.map(product => `
+                <div class="flex items-center justify-between text-sm">
+                  <span>${product.name} × ${product.quantity}</span>
+                  <span>₱${(product.price * product.quantity).toLocaleString()}</span>
+                </div>
+              `).join('')}
+              <div class="border-t pt-2 text-sm font-medium">
+                <div class="flex items-center justify-between">
+                  <span>Total</span>
+                  <span>₱${order.total.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.remove('hidden');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.add('hidden');
+    }
+
+    function openUpdateStatusModal(orderId) {
+      // Create and show the update status modal
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50';
+      modal.innerHTML = `
+        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm"></div>
+        <div class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+          <div class="flex flex-col space-y-1.5">
+            <h2 class="text-lg font-semibold leading-none tracking-tight">Update Order Status</h2>
+            <p class="text-sm text-muted-foreground">Select the new status for this order.</p>
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none">Status</label>
+              <select id="new-status" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="flex justify-end gap-4">
+              <button onclick="closeUpdateStatusModal()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                Cancel
+              </button>
+              <button onclick="updateOrderStatus('${orderId}')" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Update Status
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // Set current status as selected
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        document.getElementById('new-status').value = order.status;
+      }
+    }
+
+    function closeUpdateStatusModal() {
+      const modal = document.querySelector('.fixed.inset-0.z-50:not(#order-modal)');
+      if (modal) {
+        modal.remove();
+      }
+    }
+
+    function updateOrderStatus(orderId) {
+      const newStatus = document.getElementById('new-status').value;
+      
+      // Find and update the order
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        order.status = newStatus;
+        
+        // Close both modals
+        closeUpdateStatusModal();
+        closeOrderModal();
+        
+        // Re-render the orders table to reflect the change
+        renderOrdersTable();
+        
+        // Show success notification
+        showNotification(`Order ${orderId} status updated to ${newStatus}`);
+      }
+    }
+  </script>
+</body>
+</html> 

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+    
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <div class="container py-8">
+      <a href="market.html" class="mb-6 inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
+        <i class="ri-arrow-left-line mr-2 h-4 w-4"></i>
+        Back to Market
+      </a>
+
+      <div id="product-container" class="grid gap-8 md:grid-cols-2">
+        <!-- Product details will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Include footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/product-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+      
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+        });
+      
+      // Get product ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      
+      // Get product data
+      const product = getProductById(productId) || products[0];
+      
+      // Set page title
+      document.title = `${product.name} | Agri-Kart`;
+      
+      // Render product details
+      const productContainer = document.getElementById('product-container');
+      
+      productContainer.innerHTML = `
+        <div class="overflow-hidden rounded-lg border">
+          <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover">
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-3xl font-bold">${product.name}</h1>
+            <p class="mt-2 text-muted-foreground">${product.category}</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            ${product.certification ? product.certification.map(cert => `
+              <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                <i class="ri-leaf-line mr-1 h-3 w-3"></i>
+                ${cert}
+              </span>
+            `).join('') : ''}
+          </div>
+
+          <p class="text-2xl font-bold">${formatCurrency(product.price)}</p>
+
+          <div class="space-y-2">
+            <p class="text-sm text-muted-foreground">Quantity</p>
+            <div class="flex items-center">
+              <button 
+                id="decrease-quantity" 
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0"
+                ${product.stock <= 0 ? 'disabled' : ''}
+              >
+                <i class="ri-subtract-line h-4 w-4"></i>
+              </button>
+              <input 
+                type="number" 
+                id="quantity-input" 
+                min="1" 
+                max="${product.stock}" 
+                value="1" 
+                class="mx-2 w-16 text-center flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                ${product.stock <= 0 ? 'disabled' : ''}
+              >
+              <button 
+                id="increase-quantity" 
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0"
+                ${product.stock <= 0 ? 'disabled' : ''}
+              >
+                <i class="ri-add-line h-4 w-4"></i>
+              </button>
+              <span class="ml-4 text-sm text-muted-foreground">${product.stock} available</span>
+            </div>
+          </div>
+
+          <button 
+            id="add-to-cart-button" 
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 w-full"
+            ${product.stock <= 0 ? 'disabled' : ''}
+          >
+            <i class="ri-shopping-cart-line mr-2 h-5 w-5"></i>
+            ${product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+          </button>
+
+          <div class="space-y-4 rounded-lg border p-4">
+            <div class="flex items-start gap-2">
+              <i class="ri-truck-line mt-0.5 h-5 w-5 text-muted-foreground"></i>
+              <div>
+                <p class="font-medium">Fast Delivery</p>
+                <p class="text-sm text-muted-foreground">2-3 business days delivery</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2">
+              <i class="ri-shield-check-line mt-0.5 h-5 w-5 text-muted-foreground"></i>
+              <div>
+                <p class="font-medium">Quality Guarantee</p>
+                <p class="text-sm text-muted-foreground">Satisfaction guaranteed or your money back</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-medium">Product Details</h3>
+            <div class="mt-2 space-y-4">
+              <p>${product.description}</p>
+
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="font-medium">Seller</p>
+                  <p class="text-muted-foreground">${product.seller}</p>
+                </div>
+                <div>
+                  <p class="font-medium">Origin</p>
+                  <p class="text-muted-foreground">${product.origin}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Quantity controls
+      const quantityInput = document.getElementById('quantity-input');
+      const decreaseButton = document.getElementById('decrease-quantity');
+      const increaseButton = document.getElementById('increase-quantity');
+      const addToCartButton = document.getElementById('add-to-cart-button');
+      
+      decreaseButton.addEventListener('click', function() {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+          quantityInput.value = currentValue - 1;
+        }
+      });
+      
+      increaseButton.addEventListener('click', function() {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue < product.stock) {
+          quantityInput.value = currentValue + 1;
+        }
+      });
+      
+      quantityInput.addEventListener('change', function() {
+        let value = parseInt(this.value);
+        if (isNaN(value) || value < 1) {
+          value = 1;
+        } else if (value > product.stock) {
+          value = product.stock;
+        }
+        this.value = value;
+      });
+      
+      addToCartButton.addEventListener('click', function() {
+        if (product.stock <= 0) return;
+        
+        const quantity = parseInt(quantityInput.value);
+        
+        cart.addItem({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: quantity,
+          category: product.category
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <div class="container py-12">
+      <div class="mx-auto max-w-md">
+        <div class="mb-8 text-center">
+          <h1 class="text-3xl font-bold">Welcome to Agri-Kart</h1>
+          <p class="mt-2 text-muted-foreground">Sign in to your account or create a new one</p>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-center space-x-4">
+            <button id="buyer-button" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+              <i class="ri-shopping-basket-line mr-2 h-4 w-4"></i>
+              I'm a Buyer
+            </button>
+            <button id="seller-button" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              <i class="ri-truck-line mr-2 h-4 w-4"></i>
+              I'm a Seller
+            </button>
+          </div>
+
+          <p id="user-type-description" class="mt-2 text-center text-sm text-muted-foreground">
+            Shop for fresh produce directly from farmers
+          </p>
+        </div>
+
+        <div class="rounded-lg border shadow-sm">
+          <div class="flex border-b">
+            <button id="login-tab" class="flex-1 px-4 py-2.5 text-center text-sm font-medium border-b-2 border-primary">Login</button>
+            <button id="signup-tab" class="flex-1 px-4 py-2.5 text-center text-sm font-medium text-muted-foreground">Sign Up</button>
+          </div>
+
+          <div id="login-content" class="p-6">
+            <form id="login-form" class="space-y-4">
+              <div class="space-y-2">
+                <label for="email" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+                <input id="email" type="email" placeholder="your@email.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label for="password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                  <a href="#" class="text-xs text-primary hover:underline">
+                    Forgot password?
+                  </a>
+                </div>
+                <input id="password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                Login
+              </button>
+            </form>
+          </div>
+
+          <div id="signup-content" class="p-6 hidden">
+            <form id="signup-form" class="space-y-4">
+              <div class="space-y-2">
+                <label for="name" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Full Name</label>
+                <input id="name" placeholder="John Doe" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="space-y-2">
+                <label for="signup-email" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+                <input id="signup-email" type="email" placeholder="your@email.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="space-y-2">
+                <label for="signup-password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                <input id="signup-password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="space-y-2">
+                <label for="confirm-password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Confirm Password</label>
+                <input id="confirm-password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                Create Account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Include footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+      
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+        });
+      
+      // User type selection
+      let userType = 'buyer'; // Default
+      
+      const buyerButton = document.getElementById('buyer-button');
+      const sellerButton = document.getElementById('seller-button');
+      const userTypeDescription = document.getElementById('user-type-description');
+      
+      buyerButton.addEventListener('click', function() {
+        userType = 'buyer';
+        buyerButton.classList.remove('border', 'border-input', 'bg-background');
+        buyerButton.classList.add('bg-primary', 'text-primary-foreground');
+        
+        sellerButton.classList.remove('bg-primary', 'text-primary-foreground');
+        sellerButton.classList.add('border', 'border-input', 'bg-background');
+        
+        userTypeDescription.textContent = 'Shop for fresh produce directly from farmers';
+      });
+      
+      sellerButton.addEventListener('click', function() {
+        userType = 'seller';
+        sellerButton.classList.remove('border', 'border-input', 'bg-background');
+        sellerButton.classList.add('bg-primary', 'text-primary-foreground');
+        
+        buyerButton.classList.remove('bg-primary', 'text-primary-foreground');
+        buyerButton.classList.add('border', 'border-input', 'bg-background');
+        
+        userTypeDescription.textContent = 'Sell your farm products directly to consumers';
+      });
+      
+      // Tab switching
+      const loginTab = document.getElementById('login-tab');
+      const signupTab = document.getElementById('signup-tab');
+      const loginContent = document.getElementById('login-content');
+      const signupContent = document.getElementById('signup-content');
+      
+      loginTab.addEventListener('click', function() {
+        loginTab.classList.add('border-b-2', 'border-primary');
+        loginTab.classList.remove('text-muted-foreground');
+        
+        signupTab.classList.remove('border-b-2', 'border-primary');
+        signupTab.classList.add('text-muted-foreground');
+        
+        loginContent.classList.remove('hidden');
+        signupContent.classList.add('hidden');
+      });
+      
+      signupTab.addEventListener('click', function() {
+        signupTab.classList.add('border-b-2', 'border-primary');
+        signupTab.classList.remove('text-muted-foreground');
+        
+        loginTab.classList.remove('border-b-2', 'border-primary');
+        loginTab.classList.add('text-muted-foreground');
+        
+        signupContent.classList.remove('hidden');
+        loginContent.classList.add('hidden');
+      });
+      
+      // Form submission
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Show loading state
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i> Logging in...';
+        submitButton.disabled = true;
+        
+        // Simulate login
+        auth.login(email, password, userType)
+          .then(() => {
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+            // Redirect based on user type
+            if (userType === 'buyer') {
+              window.location.href = 'market.html';
+            } else {
+              window.location.href = 'dashboard.html';
+            }
+          })
+          .catch(error => {
+            showNotification('Login failed: ' + error.message, 'error');
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+          });
+      });
+      
+      signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        
+        if (password !== confirmPassword) {
+          showNotification('Passwords do not match', 'error');
+          return;
+        }
+        
+        // Show loading state
+        const submitButton = signupForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i> Creating account...';
+        submitButton.disabled = true;
+        
+        // Simulate signup
+        auth.signup(name, email, password, userType)
+          .then(() => {
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+            // Redirect based on user type
+            if (userType === 'buyer') {
+              window.location.href = 'market.html';
+            } else {
+              window.location.href = 'dashboard.html';
+            }
+          })
+          .catch(error => {
+            showNotification('Signup failed: ' + error.message, 'error');
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+          });
+      });
+    });
+  </script>
+</body>
+</html>

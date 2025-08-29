@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <div id="cart-content" class="container py-8">
+      <!-- Cart content will be inserted here by JavaScript -->
+    </div>
+    
+    <div id="checkout-success" class="container py-12 hidden">
+      <div class="mx-auto max-w-md text-center">
+        <div class="mb-6 flex justify-center">
+          <div class="flex h-24 w-24 items-center justify-center rounded-full bg-primary/10">
+            <i class="ri-shopping-cart-line h-12 w-12 text-primary text-4xl"></i>
+          </div>
+        </div>
+
+        <h1 class="text-2xl font-bold sm:text-3xl">Order Successful!</h1>
+        <p class="mt-4 text-muted-foreground">
+          Thank you for your purchase. Your order has been received and is being processed.
+        </p>
+
+        <div class="mt-8 space-y-4">
+          <a href="market.html">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 w-full">
+              Continue Shopping
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Include footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+      
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+        });
+      
+      // Render cart
+      renderCart();
+    });
+    
+    function renderCart() {
+      const cartContent = document.getElementById('cart-content');
+      
+      if (cart.items.length === 0) {
+        cartContent.innerHTML = `
+          <div class="mx-auto max-w-md text-center">
+            <div class="mb-6 flex justify-center">
+              <div class="flex h-24 w-24 items-center justify-center rounded-full bg-muted">
+                <i class="ri-shopping-cart-line h-12 w-12 text-muted-foreground text-4xl"></i>
+              </div>
+            </div>
+
+            <h1 class="text-2xl font-bold sm:text-3xl">Your cart is empty</h1>
+            <p class="mt-4 text-muted-foreground">Looks like you haven't added any products to your cart yet.</p>
+
+            <div class="mt-8">
+              <a href="market.html">
+                <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                  Start Shopping
+                </button>
+              </a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      cartContent.innerHTML = `
+        <div class="mb-6 flex items-center justify-between">
+          <h1 class="text-2xl font-bold">Shopping Cart</h1>
+          <a href="market.html" class="flex items-center text-sm text-muted-foreground hover:text-foreground">
+            <i class="ri-arrow-left-line mr-1 h-4 w-4"></i>
+            Continue Shopping
+          </a>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-[1fr_320px]">
+          <div class="space-y-4" id="cart-items">
+            <!-- Cart items will be inserted here -->
+          </div>
+
+          <div class="rounded-lg border bg-card p-6">
+            <h2 class="text-lg font-medium">Order Summary</h2>
+
+            <div class="mt-4 space-y-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Subtotal</span>
+                <span>${formatCurrency(cart.getTotalPrice())}</span>
+              </div>
+
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Shipping</span>
+                <span>${formatCurrency(50)}</span>
+              </div>
+
+              <hr class="border-t">
+
+              <div class="flex justify-between font-medium">
+                <span>Total</span>
+                <span>${formatCurrency(cart.getTotalPrice() + 50)}</span>
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="space-y-3">
+                <label class="text-sm font-medium">Payment Method</label>
+                <div class="space-y-2">
+                  <label class="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:bg-accent">
+                    <input type="radio" name="payment-method" value="card" class="h-4 w-4 text-primary" checked>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium">Credit/Debit Card</p>
+                        <div class="flex space-x-1">
+                          <i class="ri-visa-line text-lg"></i>
+                          <i class="ri-mastercard-line text-lg"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:bg-accent">
+                    <input type="radio" name="payment-method" value="cod" class="h-4 w-4 text-primary">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium">Cash on Delivery</p>
+                        <i class="ri-money-dollar-box-line text-lg"></i>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:bg-accent">
+                    <input type="radio" name="payment-method" value="ewallet" class="h-4 w-4 text-primary">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium">E-wallet</p>
+                        <div class="flex items-center space-x-2">
+                          <span class="text-xs">GCash/PayMaya</span>
+                          <i class="ri-wallet-3-line text-lg"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:bg-accent">
+                    <input type="radio" name="payment-method" value="bank" class="h-4 w-4 text-primary">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium">Bank Transfer</p>
+                        <i class="ri-bank-line text-lg"></i>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Payment Details Forms -->
+              <div id="payment-details" class="space-y-4">
+                <!-- Credit Card Form (default) -->
+                <div id="card-form" class="space-y-3">
+                  <div class="space-y-2">
+                    <label class="text-sm font-medium">Card Number</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                      <label class="text-sm font-medium">Expiry Date</label>
+                      <input type="text" id="card-expiry" placeholder="MM/YY" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    </div>
+                    <div class="space-y-2">
+                      <label class="text-sm font-medium">CVV</label>
+                      <input type="text" id="card-cvv" placeholder="123" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- E-wallet Form -->
+                <div id="ewallet-form" class="space-y-3 hidden">
+                  <div class="space-y-2">
+                    <label class="text-sm font-medium">Select E-wallet</label>
+                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                      <option value="gcash">GCash</option>
+                      <option value="paymaya">PayMaya</option>
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="text-sm font-medium">Mobile Number</label>
+                    <input type="text" placeholder="09XX XXX XXXX" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  </div>
+                </div>
+
+                <!-- Bank Transfer Form -->
+                <div id="bank-form" class="space-y-3 hidden">
+                  <div class="space-y-2">
+                    <label class="text-sm font-medium">Select Bank</label>
+                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                      <option value="bdo">BDO</option>
+                      <option value="bpi">BPI</option>
+                      <option value="metrobank">Metrobank</option>
+                      <option value="unionbank">UnionBank</option>
+                    </select>
+                  </div>
+                  <div class="rounded-lg bg-muted p-3">
+                    <p class="text-sm font-medium">Bank Account Details:</p>
+                    <p class="text-sm text-muted-foreground">Account Name: Agri-Kart Inc.</p>
+                    <p class="text-sm text-muted-foreground">Account Number: 1234 5678 9012</p>
+                  </div>
+                </div>
+              </div>
+
+              <button id="checkout-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 w-full">
+                Place Order
+              </button>
+
+              <p class="text-center text-xs text-muted-foreground">By placing your order, you agree to our Terms of Service and Privacy Policy</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      const cartItemsContainer = document.getElementById('cart-items');
+      
+      cart.items.forEach(item => {
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'flex items-start gap-4 rounded-lg border p-4';
+        
+        cartItemElement.innerHTML = `
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border">
+            <img src="${item.image}" alt="${item.name}" class="h-full w-full object-cover">
+          </div>
+
+          <div class="flex flex-1 flex-col">
+            <div class="flex justify-between">
+              <a href="product.html?id=${item.id}" class="font-medium hover:underline">
+                ${item.name}
+              </a>
+              <p class="font-medium">${formatCurrency(item.price * item.quantity)}</p>
+            </div>
+
+            <p class="text-sm text-muted-foreground">${item.category}</p>
+            <p class="text-sm text-muted-foreground">${formatCurrency(item.price)} each</p>
+
+            <div class="mt-2 flex items-center justify-between">
+              <div class="flex items-center">
+                <button 
+                  onclick="decreaseQuantity('${item.id}')"
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0"
+                  ${item.quantity <= 1 ? 'disabled' : ''}
+                >
+                  <i class="ri-subtract-line h-3 w-3"></i>
+                </button>
+                <span class="mx-2 w-8 text-center">${item.quantity}</span>
+                <button 
+                  onclick="increaseQuantity('${item.id}')"
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0"
+                >
+                  <i class="ri-add-line h-3 w-3"></i>
+                </button>
+              </div>
+
+              <button 
+                onclick="removeItem('${item.id}')"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 px-3 py-2 text-muted-foreground hover:text-destructive"
+              >
+                <i class="ri-delete-bin-line mr-1 h-4 w-4"></i>
+                Remove
+              </button>
+            </div>
+          </div>
+        `;
+        
+        cartItemsContainer.appendChild(cartItemElement);
+      });
+      
+      // Add checkout button event listener
+      document.getElementById('checkout-button').addEventListener('click', handleCheckout);
+    }
+    
+    function decreaseQuantity(itemId) {
+      const item = cart.items.find(item => item.id === itemId);
+      if (item && item.quantity > 1) {
+        cart.updateQuantity(itemId, item.quantity - 1);
+        renderCart();
+      }
+    }
+    
+    function increaseQuantity(itemId) {
+      const item = cart.items.find(item => item.id === itemId);
+      if (item) {
+        cart.updateQuantity(itemId, item.quantity + 1);
+        renderCart();
+      }
+    }
+    
+    function removeItem(itemId) {
+      cart.removeItem(itemId);
+      renderCart();
+    }
+    
+    function handleCheckout() {
+      // Get selected payment method
+      const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+      
+      // Validate payment details based on selected method
+      if (!validatePaymentDetails(selectedPaymentMethod)) {
+        return;
+      }
+
+      // Show loading state
+      const checkoutButton = document.getElementById('checkout-button');
+      checkoutButton.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i> Processing...';
+      checkoutButton.disabled = true;
+      
+      // Simulate payment processing
+      setTimeout(() => {
+        document.getElementById('cart-content').classList.add('hidden');
+        document.getElementById('checkout-success').classList.remove('hidden');
+        cart.clearCart();
+      }, 2000);
+    }
+
+    function validatePaymentDetails(method) {
+      switch (method) {
+        case 'card':
+          const cardNumber = document.getElementById('card-number').value;
+          const cardExpiry = document.getElementById('card-expiry').value;
+          const cardCvv = document.getElementById('card-cvv').value;
+
+          if (!cardNumber || !cardExpiry || !cardCvv) {
+            showNotification('Please fill in all card details', 'error');
+            return false;
+          }
+
+          // Basic validation
+          if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
+            showNotification('Invalid card number', 'error');
+            return false;
+          }
+
+          if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            showNotification('Invalid expiry date (MM/YY)', 'error');
+            return false;
+          }
+
+          if (!/^\d{3}$/.test(cardCvv)) {
+            showNotification('Invalid CVV', 'error');
+            return false;
+          }
+          break;
+
+        case 'ewallet':
+          const mobileNumber = document.querySelector('#ewallet-form input[type="text"]').value;
+          if (!mobileNumber || !/^09\d{9}$/.test(mobileNumber)) {
+            showNotification('Please enter a valid mobile number', 'error');
+            return false;
+          }
+          break;
+
+        case 'bank':
+          const selectedBank = document.querySelector('#bank-form select').value;
+          if (!selectedBank) {
+            showNotification('Please select a bank', 'error');
+            return false;
+          }
+          break;
+      }
+
+      return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Previous event listeners...
+
+      // Handle payment method changes
+      const paymentMethods = document.getElementsByName('payment-method');
+      const cardForm = document.getElementById('card-form');
+      const ewalletForm = document.getElementById('ewallet-form');
+      const bankForm = document.getElementById('bank-form');
+
+      paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+          // Hide all forms
+          cardForm.classList.add('hidden');
+          ewalletForm.classList.add('hidden');
+          bankForm.classList.add('hidden');
+
+          // Show selected form
+          switch (this.value) {
+            case 'card':
+              cardForm.classList.remove('hidden');
+              break;
+            case 'ewallet':
+              ewalletForm.classList.remove('hidden');
+              break;
+            case 'bank':
+              bankForm.classList.remove('hidden');
+              break;
+          }
+        });
+      });
+
+      // Format card number input
+      const cardNumberInput = document.getElementById('card-number');
+      cardNumberInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})/g, '$1 ').trim();
+        e.target.value = value.substring(0, 19); // 16 digits + 3 spaces
+      });
+
+      // Format expiry date input
+      const expiryInput = document.getElementById('card-expiry');
+      expiryInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+          value = value.substring(0, 2) + '/' + value.substring(2);
+        }
+        e.target.value = value.substring(0, 5); // MM/YY format
+      });
+
+      // Format CVV input
+      const cvvInput = document.getElementById('card-cvv');
+      cvvInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        e.target.value = value.substring(0, 3);
+      });
+
+      // Format mobile number input
+      const mobileInput = document.querySelector('#ewallet-form input[type="text"]');
+      mobileInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 0 && !value.startsWith('09')) {
+          value = '09' + value;
+        }
+        e.target.value = value.substring(0, 11); // 11 digits for PH mobile numbers
+      });
+    });
+  </script>
+</body>
+</html>

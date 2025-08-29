@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(142 76% 36%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(142 76% 36%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96.1%)",
+              foreground: "hsl(222.2 47.4% 11.2%)",
+            },
+            popover: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+          borderRadius: {
+            lg: "0.5rem",
+            md: "calc(0.5rem - 2px)",
+            sm: "calc(0.5rem - 4px)",
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+      }
+    }
+    
+    /* Custom slider styles */
+    .price-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 5px;
+      background: hsl(214.3 31.8% 91.4%);
+      outline: none;
+    }
+    
+    .price-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: hsl(142 76% 36%);
+      cursor: pointer;
+    }
+    
+    .price-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: hsl(142 76% 36%);
+      cursor: pointer;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <!-- Include header -->
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <div class="container py-8">
+      <!-- Search bar -->
+      <div class="mb-6 flex items-center gap-2">
+        <div class="relative flex-1">
+          <i class="ri-search-line absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+          <input 
+            type="search" 
+            id="search-input"
+            placeholder="Search for products..." 
+            class="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+        </div>
+
+        <button 
+          id="mobile-filters-button"
+          class="md:hidden inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0"
+        >
+          <i class="ri-equalizer-line h-4 w-4"></i>
+          <span class="sr-only">Filters</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-[240px_1fr]">
+        <!-- Filters - Desktop -->
+        <div class="hidden md:block">
+          <div class="rounded-lg border bg-card p-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-medium">Filters</h3>
+              <button id="reset-filters-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 px-3 py-2">
+                Reset
+              </button>
+            </div>
+
+            <div class="mt-4 space-y-6">
+              <!-- Category filter -->
+              <div>
+                <h4 class="mb-2 text-sm font-medium">Product Category</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="category-fruits" class="category-checkbox" value="Fruits">
+                    <label for="category-fruits" class="text-sm">Fruits</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="category-vegetables" class="category-checkbox" value="Vegetables">
+                    <label for="category-vegetables" class="text-sm">Vegetables</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="category-grains" class="category-checkbox" value="Grains">
+                    <label for="category-grains" class="text-sm">Grains</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Price range filter -->
+              <div>
+                <h4 class="mb-2 text-sm font-medium">Price Range</h4>
+                <div class="space-y-4">
+                  <input 
+                    type="range" 
+                    id="price-slider" 
+                    min="0" 
+                    max="300" 
+                    step="5" 
+                    value="300"
+                    class="price-slider"
+                  >
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm">₱0</span>
+                    <span class="text-sm" id="price-display">₱300</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Certification filter -->
+              <div>
+                <h4 class="mb-2 text-sm font-medium">Certifications</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="cert-organic" class="certification-checkbox" value="Organic">
+                    <label for="cert-organic" class="text-sm">Organic</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="cert-non-gmo" class="certification-checkbox" value="Non-GMO">
+                    <label for="cert-non-gmo" class="text-sm">Non-GMO</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="cert-fair-trade" class="certification-checkbox" value="Fair Trade">
+                    <label for="cert-fair-trade" class="text-sm">Fair Trade</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="cert-regenerative" class="certification-checkbox" value="Regenerative">
+                    <label for="cert-regenerative" class="text-sm">Regenerative</label>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="cert-pesticide-free" class="certification-checkbox" value="Pesticide Free">
+                    <label for="cert-pesticide-free" class="text-sm">Pesticide Free</label>
+                  </div>
+                </div>
+              </div>
+
+              <button id="apply-filters-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products grid -->
+        <div>
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="text-xl font-bold">Products</h2>
+            <p class="text-sm text-muted-foreground" id="products-count">
+              12 products found
+            </p>
+          </div>
+
+          <div id="products-grid" class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <!-- Products will be inserted here by JavaScript -->
+          </div>
+          
+          <div id="no-products-message" class="flex h-40 items-center justify-center rounded-lg border hidden">
+            <p class="text-center text-muted-foreground">No products found matching your filters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile filters -->
+  <div id="mobile-filters" class="fixed inset-0 z-50 bg-background translate-x-full transition-transform md:hidden">
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between border-b px-4 py-3">
+        <h3 class="font-medium">Filters</h3>
+        <button id="close-mobile-filters" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9 p-0">
+          <i class="ri-close-line h-5 w-5"></i>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-auto p-4">
+        <div class="space-y-6">
+          <!-- Category filter -->
+          <div>
+            <h4 class="mb-2 text-sm font-medium">Product Category</h4>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-category-fruits" class="mobile-category-checkbox" value="Fruits">
+                <label for="mobile-category-fruits" class="text-sm">Fruits</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-category-vegetables" class="mobile-category-checkbox" value="Vegetables">
+                <label for="mobile-category-vegetables" class="text-sm">Vegetables</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-category-grains" class="mobile-category-checkbox" value="Grains">
+                <label for="mobile-category-grains" class="text-sm">Grains</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price range filter -->
+          <div>
+            <h4 class="mb-2 text-sm font-medium">Price Range</h4>
+            <div class="space-y-4">
+              <input 
+                type="range" 
+                id="mobile-price-slider" 
+                min="0" 
+                max="300" 
+                step="5" 
+                value="300"
+                class="price-slider"
+              >
+              <div class="flex items-center justify-between">
+                <span class="text-sm">₱0</span>
+                <span class="text-sm" id="mobile-price-display">₱300</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Certification filter -->
+          <div>
+            <h4 class="mb-2 text-sm font-medium">Certifications</h4>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-cert-organic" class="mobile-certification-checkbox" value="Organic">
+                <label for="mobile-cert-organic" class="text-sm">Organic</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-cert-non-gmo" class="mobile-certification-checkbox" value="Non-GMO">
+                <label for="mobile-cert-non-gmo" class="text-sm">Non-GMO</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-cert-fair-trade" class="mobile-certification-checkbox" value="Fair Trade">
+                <label for="mobile-cert-fair-trade" class="text-sm">Fair Trade</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-cert-regenerative" class="mobile-certification-checkbox" value="Regenerative">
+                <label for="mobile-cert-regenerative" class="text-sm">Regenerative</label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="mobile-cert-pesticide-free" class="mobile-certification-checkbox" value="Pesticide Free">
+                <label for="mobile-cert-pesticide-free" class="text-sm">Pesticide Free</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t p-4">
+        <div class="flex gap-2">
+          <button id="mobile-reset-filters-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex-1">
+            Reset
+          </button>
+          <button id="mobile-apply-filters-button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 flex-1">
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/product-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('components/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+        });
+      
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+        });
+      
+      // Filter state
+      let filters = {
+        searchQuery: '',
+        priceRange: [0, 300],
+        categories: [],
+        certifications: []
+      };
+      
+      // DOM elements
+      const searchInput = document.getElementById('search-input');
+      const priceSlider = document.getElementById('price-slider');
+      const priceDisplay = document.getElementById('price-display');
+      const mobilePriceSlider = document.getElementById('mobile-price-slider');
+      const mobilePriceDisplay = document.getElementById('mobile-price-display');
+      const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+      const certificationCheckboxes = document.querySelectorAll('.certification-checkbox');
+      const mobileCategoryCheckboxes = document.querySelectorAll('.mobile-category-checkbox');
+      const mobileCertificationCheckboxes = document.querySelectorAll('.mobile-certification-checkbox');
+      const applyFiltersButton = document.getElementById('apply-filters-button');
+      const resetFiltersButton = document.getElementById('reset-filters-button');
+      const mobileApplyFiltersButton = document.getElementById('mobile-apply-filters-button');
+      const mobileResetFiltersButton = document.getElementById('mobile-reset-filters-button');
+      const mobileFiltersButton = document.getElementById('mobile-filters-button');
+      const closeMobileFiltersButton = document.getElementById('close-mobile-filters');
+      const mobileFilters = document.getElementById('mobile-filters');
+      const productsGrid = document.getElementById('products-grid');
+      const noProductsMessage = document.getElementById('no-products-message');
+      const productsCount = document.getElementById('products-count');
+      
+      // Initialize products
+      renderProducts(products);
+      
+      // Event listeners
+      searchInput.addEventListener('input', function() {
+        filters.searchQuery = this.value;
+        applyFilters();
+      });
+      
+      priceSlider.addEventListener('input', function() {
+        filters.priceRange = [0, parseInt(this.value)];
+        priceDisplay.textContent = formatCurrency(parseInt(this.value));
+        mobilePriceSlider.value = this.value;
+        mobilePriceDisplay.textContent = formatCurrency(parseInt(this.value));
+      });
+      
+      mobilePriceSlider.addEventListener('input', function() {
+        filters.priceRange = [0, parseInt(this.value)];
+        mobilePriceDisplay.textContent = formatCurrency(parseInt(this.value));
+        priceSlider.value = this.value;
+        priceDisplay.textContent = formatCurrency(parseInt(this.value));
+      });
+      
+      categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateCategoryFilters();
+          syncMobileCheckboxes();
+        });
+      });
+      
+      certificationCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateCertificationFilters();
+          syncMobileCheckboxes();
+        });
+      });
+      
+      mobileCategoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateMobileCategoryFilters();
+          syncDesktopCheckboxes();
+        });
+      });
+      
+      mobileCertificationCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateMobileCertificationFilters();
+          syncDesktopCheckboxes();
+        });
+      });
+      
+      applyFiltersButton.addEventListener('click', applyFilters);
+      mobileApplyFiltersButton.addEventListener('click', function() {
+        applyFilters();
+        closeMobileFiltersPanel();
+      });
+      
+      resetFiltersButton.addEventListener('click', resetFilters);
+      mobileResetFiltersButton.addEventListener('click', resetFilters);
+      
+      mobileFiltersButton.addEventListener('click', openMobileFiltersPanel);
+      closeMobileFiltersButton.addEventListener('click', closeMobileFiltersPanel);
+      
+      // Functions
+      function updateCategoryFilters() {
+        filters.categories = Array.from(categoryCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
+      }
+      
+      function updateCertificationFilters() {
+        filters.certifications = Array.from(certificationCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
+      }
+      
+      function updateMobileCategoryFilters() {
+        filters.categories = Array.from(mobileCategoryCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
+      }
+      
+      function updateMobileCertificationFilters() {
+        filters.certifications = Array.from(mobileCertificationCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
+      }
+      
+      function syncMobileCheckboxes() {
+        // Sync categories
+        mobileCategoryCheckboxes.forEach(checkbox => {
+          const desktopCheckbox = document.getElementById(`category-${checkbox.value.toLowerCase()}`);
+          if (desktopCheckbox) {
+            checkbox.checked = desktopCheckbox.checked;
+          }
+        });
+        
+        // Sync certifications
+        mobileCertificationCheckboxes.forEach(checkbox => {
+          const value = checkbox.value.toLowerCase().replace(/\s+/g, '-');
+          const desktopCheckbox = document.getElementById(`cert-${value}`);
+          if (desktopCheckbox) {
+            checkbox.checked = desktopCheckbox.checked;
+          }
+        });
+      }
+      
+      function syncDesktopCheckboxes() {
+        // Sync categories
+        categoryCheckboxes.forEach(checkbox => {
+          const mobileCheckbox = document.getElementById(`mobile-category-${checkbox.value.toLowerCase()}`);
+          if (mobileCheckbox) {
+            checkbox.checked = mobileCheckbox.checked;
+          }
+        });
+        
+        // Sync certifications
+        certificationCheckboxes.forEach(checkbox => {
+          const value = checkbox.value.toLowerCase().replace(/\s+/g, '-');
+          const mobileCheckbox = document.getElementById(`mobile-cert-${value}`);
+          if (mobileCheckbox) {
+            checkbox.checked = mobileCheckbox.checked;
+          }
+        });
+      }
+      
+      function applyFilters() {
+        updateCategoryFilters();
+        updateCertificationFilters();
+        
+        const filteredProducts = filterProducts(filters);
+        renderProducts(filteredProducts);
+      }
+      
+      function resetFilters() {
+        // Reset search
+        searchInput.value = '';
+        filters.searchQuery = '';
+        
+        // Reset price range
+        priceSlider.value = 300;
+        mobilePriceSlider.value = 300;
+        priceDisplay.textContent = formatCurrency(300);
+        mobilePriceDisplay.textContent = formatCurrency(300);
+        filters.priceRange = [0, 300];
+        
+        // Reset checkboxes
+        categoryCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        certificationCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        mobileCategoryCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        mobileCertificationCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        filters.categories = [];
+        filters.certifications = [];
+        
+        // Apply reset filters
+        renderProducts(products);
+      }
+      
+      function openMobileFiltersPanel() {
+        mobileFilters.classList.remove('translate-x-full');
+      }
+      
+      function closeMobileFiltersPanel() {
+        mobileFilters.classList.add('translate-x-full');
+      }
+      
+      function renderProducts(productsToRender) {
+        productsGrid.innerHTML = '';
+        
+        if (productsToRender.length === 0) {
+          productsGrid.classList.add('hidden');
+          noProductsMessage.classList.remove('hidden');
+          productsCount.textContent = '0 products found';
+          return;
+        }
+        
+        productsGrid.classList.remove('hidden');
+        noProductsMessage.classList.add('hidden');
+        productsCount.textContent = `${productsToRender.length} ${productsToRender.length === 1 ? 'product' : 'products'} found`;
+        
+        productsToRender.forEach(product => {
+          const productCard = document.createElement('div');
+          productCard.className = 'group relative overflow-hidden rounded-lg border bg-background transition-all hover:shadow-md';
+          
+          productCard.innerHTML = `
+            <a href="product.html?id=${product.id}" class="block overflow-hidden">
+              <div class="aspect-square overflow-hidden">
+                <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
+              </div>
+            </a>
+            <div class="p-4">
+              <a href="product.html?id=${product.id}">
+                <h3 class="font-medium">${product.name}</h3>
+              </a>
+              <p class="mt-1 text-lg font-bold">${formatCurrency(product.price)}</p>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="text-xs text-muted-foreground">${product.category}</span>
+                <button onclick="addToCart('${product.id}')" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 px-3 text-xs">
+                  <i class="ri-shopping-cart-line mr-2 h-4 w-4"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          `;
+          
+          productsGrid.appendChild(productCard);
+        });
+      }
+    });
+    
+    // Add to cart function
+    function addToCart(productId) {
+      const product = getProductById(productId);
+      if (product) {
+        cart.addItem({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+          category: product.category
+        });
+      }
+    }
+  </script>
+</body>
+</html>
