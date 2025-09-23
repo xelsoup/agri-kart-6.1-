@@ -74,8 +74,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body class="flex min-h-screen flex-col">
-  <!-- Include header -->
-  <div id="header-container"></div>
+  
 
   <main class="flex-1">
     <div class="container py-12">
@@ -85,31 +84,43 @@
           <p class="mt-2 text-muted-foreground">Sign in to your account or create a new one</p>
         </div>
 
+        
+
         <div class="mb-6">
-          <div class="flex justify-center space-x-4">
-            <button id="buyer-button" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-              <i class="ri-shopping-basket-line mr-2 h-4 w-4"></i>
-              I'm a Buyer
+          <div class="flex justify-center space-x-0" role="tablist" aria-label="Select role">
+            <button id="buyer-button" role="tab" aria-controls="role-panel" class="flex-1 inline-flex items-center justify-center text-sm font-bold h-12 px-4 transition-all focus-visible:outline-none border rounded-t-md bg-[#4CAF50] text-white hover:shadow-sm" aria-selected="true">
+              <i class="ri-shopping-cart-line mr-2 h-5 w-5" aria-hidden="true"></i>
+              Buyer: Shop Fresh Produce
             </button>
-            <button id="seller-button" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-              <i class="ri-truck-line mr-2 h-4 w-4"></i>
-              I'm a Seller
+            <button id="seller-button" role="tab" aria-controls="role-panel" class="flex-1 inline-flex items-center justify-center text-sm font-medium h-12 px-4 transition-all focus-visible:outline-none border rounded-t-md bg-[#F5F5F5] text-foreground hover:shadow-sm" aria-selected="false">
+              <i class="ri-seedling-line mr-2 h-5 w-5" aria-hidden="true"></i>
+              Seller: List Your Farm Products
             </button>
           </div>
 
-          <p id="user-type-description" class="mt-2 text-center text-sm text-muted-foreground">
-            Shop for fresh produce directly from farmers
-          </p>
+          <section id="role-panel" class="mt-2" role="region" aria-labelledby="role-heading">
+            <h2 id="role-heading" class="sr-only">Buyer Role Description</h2>
+            <div id="role-description-card" class="rounded-md" style="background:#E8F5E9; padding:16px;">
+              <p class="text-sm text-muted-foreground">
+                Shop directly from verified farmers. Access deals and enjoy fast delivery.
+              </p>
+            </div>
+          </section>
         </div>
 
         <div class="rounded-lg border shadow-sm">
-          <div class="flex border-b">
-            <button id="login-tab" class="flex-1 px-4 py-2.5 text-center text-sm font-medium border-b-2 border-primary">Login</button>
-            <button id="signup-tab" class="flex-1 px-4 py-2.5 text-center text-sm font-medium text-muted-foreground">Sign Up</button>
+          <div class="flex border-b" role="tablist" aria-label="Authentication mode">
+            <button id="login-tab" role="tab" aria-controls="login-content" aria-selected="true" class="flex-1 px-4 py-2.5 text-center text-sm font-medium border-b-2 border-primary">Login as Buyer</button>
+            <button id="signup-tab" role="tab" aria-controls="signup-content" aria-selected="false" class="flex-1 px-4 py-2.5 text-center text-sm font-medium text-muted-foreground">Sign Up as Buyer</button>
           </div>
 
           <div id="login-content" class="p-6">
             <form id="login-form" class="space-y-4">
+              <div class="space-y-2">
+                <label for="login-username" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
+                <input id="login-username" type="text" placeholder="yourusername" required minlength="3" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
               <div class="space-y-2">
                 <label for="email" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
                 <input id="email" type="email" placeholder="your@email.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
@@ -118,20 +129,32 @@
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
                   <label for="password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
-                  <a href="#" class="text-xs text-primary hover:underline">
+                  <a href="reset-password.html" role="link" aria-label="Recover forgotten password" class="text-xs text-primary hover:underline hover:shadow-sm">
                     Forgot password?
                   </a>
                 </div>
-                <input id="password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <input id="password" type="password" required minlength="8" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
               </div>
 
               <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Login
               </button>
+
+              <div class="relative py-2 text-center">
+                <span class="px-2 text-xs text-muted-foreground">or continue with</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="login-google-btn" type="button" class="inline-flex items-center justify-center rounded-md border bg-background h-10 px-4 text-sm hover:shadow-sm">
+                  <i class="ri-google-fill mr-2"></i> Google
+                </button>
+                <button id="login-facebook-btn" type="button" class="inline-flex items-center justify-center rounded-md border bg-background h-10 px-4 text-sm hover:shadow-sm">
+                  <i class="ri-facebook-circle-fill mr-2"></i> Facebook
+                </button>
+              </div>
             </form>
           </div>
 
-          <div id="signup-content" class="p-6 hidden">
+          <div id="signup-content" class="p-6 hidden" role="tabpanel" aria-labelledby="signup-tab">
             <form id="signup-form" class="space-y-4">
               <div class="space-y-2">
                 <label for="name" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Full Name</label>
@@ -139,23 +162,46 @@
               </div>
 
               <div class="space-y-2">
+                <label for="signup-username" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Username</label>
+                <input id="signup-username" type="text" placeholder="yourusername" required minlength="3" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="space-y-2">
                 <label for="signup-email" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
-                <input id="signup-email" type="email" placeholder="your@email.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <input id="signup-email" type="email" placeholder="your@email.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" aria-describedby="signup-email-hint">
+                <p id="signup-email-hint" class="text-xs text-muted-foreground">For sellers, use your farm email.</p>
               </div>
 
               <div class="space-y-2">
                 <label for="signup-password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
-                <input id="signup-password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <input id="signup-password" type="password" required minlength="8" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
               </div>
 
               <div class="space-y-2">
                 <label for="confirm-password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Confirm Password</label>
-                <input id="confirm-password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <input id="confirm-password" type="password" required minlength="8" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              </div>
+
+              <div class="flex items-start space-x-2">
+                <input id="tos" type="checkbox" required class="mt-0.5">
+                <label for="tos" class="text-sm text-muted-foreground">I agree to the <a role="link" href="#" class="underline">Terms of Service</a> and <a role="link" href="#" class="underline">Privacy Policy</a>.</label>
               </div>
 
               <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Create Account
               </button>
+
+              <div class="relative py-2 text-center">
+                <span class="px-2 text-xs text-muted-foreground">or sign up with</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="signup-google-btn" type="button" class="inline-flex items-center justify-center rounded-md border bg-background h-10 px-4 text-sm hover:shadow-sm">
+                  <i class="ri-google-fill mr-2"></i> Google
+                </button>
+                <button id="signup-facebook-btn" type="button" class="inline-flex items-center justify-center rounded-md border bg-background h-10 px-4 text-sm hover:shadow-sm">
+                  <i class="ri-facebook-circle-fill mr-2"></i> Facebook
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -169,13 +215,7 @@
   <script src="js/utils.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Load header and footer
-      fetch('components/header.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('header-container').innerHTML = data;
-        });
-      
+      // Load footer only
       fetch('components/footer.html')
         .then(response => response.text())
         .then(data => {
@@ -187,28 +227,53 @@
       
       const buyerButton = document.getElementById('buyer-button');
       const sellerButton = document.getElementById('seller-button');
-      const userTypeDescription = document.getElementById('user-type-description');
       
       buyerButton.addEventListener('click', function() {
         userType = 'buyer';
-        buyerButton.classList.remove('border', 'border-input', 'bg-background');
-        buyerButton.classList.add('bg-primary', 'text-primary-foreground');
-        
-        sellerButton.classList.remove('bg-primary', 'text-primary-foreground');
-        sellerButton.classList.add('border', 'border-input', 'bg-background');
-        
-        userTypeDescription.textContent = 'Shop for fresh produce directly from farmers';
+        // Active styles for Buyer tab
+        buyerButton.setAttribute('aria-selected', 'true');
+        sellerButton.setAttribute('aria-selected', 'false');
+        buyerButton.classList.add('bg-[#4CAF50]', 'text-white', 'font-bold');
+        buyerButton.classList.remove('bg-[#F5F5F5]', 'text-foreground', 'font-medium');
+        sellerButton.classList.add('bg-[#F5F5F5]', 'text-foreground', 'font-medium');
+        sellerButton.classList.remove('bg-[#4CAF50]', 'text-white', 'font-bold');
+
+        // Update role description
+        const roleHeading = document.getElementById('role-heading');
+        const roleCard = document.getElementById('role-description-card');
+        if (roleHeading) roleHeading.textContent = 'Buyer Role Description';
+        if (roleCard) roleCard.innerHTML = '<p class="text-sm text-muted-foreground">Shop directly from verified farmers. Access deals and enjoy fast delivery.</p>';
+        // Enable native validation for buyer
+        const lf = document.getElementById('login-form');
+        const sf = document.getElementById('signup-form');
+        if (lf) lf.noValidate = false;
+        if (sf) sf.noValidate = false;
+        // Update auth tab labels to reflect role
+        updateAuthTabLabels();
       });
       
       sellerButton.addEventListener('click', function() {
         userType = 'seller';
-        sellerButton.classList.remove('border', 'border-input', 'bg-background');
-        sellerButton.classList.add('bg-primary', 'text-primary-foreground');
-        
-        buyerButton.classList.remove('bg-primary', 'text-primary-foreground');
-        buyerButton.classList.add('border', 'border-input', 'bg-background');
-        
-        userTypeDescription.textContent = 'Sell your farm products directly to consumers';
+        // Active styles for Seller tab
+        sellerButton.setAttribute('aria-selected', 'true');
+        buyerButton.setAttribute('aria-selected', 'false');
+        sellerButton.classList.add('bg-[#4CAF50]', 'text-white', 'font-bold');
+        sellerButton.classList.remove('bg-[#F5F5F5]', 'text-foreground', 'font-medium');
+        buyerButton.classList.add('bg-[#F5F5F5]', 'text-foreground', 'font-medium');
+        buyerButton.classList.remove('bg-[#4CAF50]', 'text-white', 'font-bold');
+
+        // Update role description
+        const roleHeading = document.getElementById('role-heading');
+        const roleCard = document.getElementById('role-description-card');
+        if (roleHeading) roleHeading.textContent = 'Seller Role Description';
+        if (roleCard) roleCard.innerHTML = '<p class="text-sm text-muted-foreground">List your harvest, manage orders, and reach buyers easily.</p>';
+        // Disable native validation for seller
+        const lf = document.getElementById('login-form');
+        const sf = document.getElementById('signup-form');
+        if (lf) lf.noValidate = true;
+        if (sf) sf.noValidate = true;
+        // Update auth tab labels to reflect role
+        updateAuthTabLabels();
       });
       
       // Tab switching
@@ -217,24 +282,32 @@
       const loginContent = document.getElementById('login-content');
       const signupContent = document.getElementById('signup-content');
       
+      function updateAuthTabLabels() {
+        const roleText = userType === 'buyer' ? 'Buyer' : 'Seller';
+        loginTab.textContent = `Login as ${roleText}`;
+        signupTab.textContent = `Sign Up as ${roleText}`;
+      }
+
+      updateAuthTabLabels();
+
       loginTab.addEventListener('click', function() {
+        loginTab.setAttribute('aria-selected', 'true');
+        signupTab.setAttribute('aria-selected', 'false');
         loginTab.classList.add('border-b-2', 'border-primary');
         loginTab.classList.remove('text-muted-foreground');
-        
         signupTab.classList.remove('border-b-2', 'border-primary');
         signupTab.classList.add('text-muted-foreground');
-        
         loginContent.classList.remove('hidden');
         signupContent.classList.add('hidden');
       });
       
       signupTab.addEventListener('click', function() {
+        signupTab.setAttribute('aria-selected', 'true');
+        loginTab.setAttribute('aria-selected', 'false');
         signupTab.classList.add('border-b-2', 'border-primary');
         signupTab.classList.remove('text-muted-foreground');
-        
         loginTab.classList.remove('border-b-2', 'border-primary');
         loginTab.classList.add('text-muted-foreground');
-        
         signupContent.classList.remove('hidden');
         loginContent.classList.add('hidden');
       });
@@ -242,10 +315,170 @@
       // Form submission
       const loginForm = document.getElementById('login-form');
       const signupForm = document.getElementById('signup-form');
+      const loginGoogleBtn = document.getElementById('login-google-btn');
+      const loginFacebookBtn = document.getElementById('login-facebook-btn');
+      const signupGoogleBtn = document.getElementById('signup-google-btn');
+      const signupFacebookBtn = document.getElementById('signup-facebook-btn');
+      // Default buyer: ensure validation enabled initially
+      if (loginForm) loginForm.noValidate = false;
+      if (signupForm) signupForm.noValidate = false;
+
+      // Real-time validation (buyer only) and email registration checks
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const signupEmailInput = document.getElementById('signup-email');
+      const signupPasswordInput = document.getElementById('signup-password');
+      const confirmPasswordInput = document.getElementById('confirm-password');
+
+      function reportIfBuyer(inputEl) {
+        if (!inputEl) return;
+        if (userType !== 'buyer') return;
+        inputEl.reportValidity();
+      }
+
+      function getRegisteredUsers() {
+        try {
+          const raw = localStorage.getItem('registeredUsers');
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function isEmailRegistered(targetEmail) {
+        const users = getRegisteredUsers();
+        return users.some(u => (u.email || '').toLowerCase() === (targetEmail || '').toLowerCase());
+      }
+
+      if (emailInput) {
+        emailInput.addEventListener('input', function() { reportIfBuyer(emailInput); });
+      }
+      if (passwordInput) {
+        passwordInput.addEventListener('input', function() { reportIfBuyer(passwordInput); });
+      }
+      if (signupEmailInput) {
+        signupEmailInput.addEventListener('input', function() {
+          // Duplicate email check during signup typing
+          if (isEmailRegistered(signupEmailInput.value)) {
+            signupEmailInput.setCustomValidity('Email already registered. Please use another email.');
+          } else {
+            signupEmailInput.setCustomValidity('');
+          }
+          reportIfBuyer(signupEmailInput);
+        });
+      }
+      if (signupPasswordInput) {
+        signupPasswordInput.addEventListener('input', function() {
+          reportIfBuyer(signupPasswordInput);
+          if (confirmPasswordInput && confirmPasswordInput.value.length > 0) {
+            // Re-validate confirm match as user types password
+            if (signupPasswordInput.value !== confirmPasswordInput.value) {
+              confirmPasswordInput.setCustomValidity('Passwords do not match');
+            } else {
+              confirmPasswordInput.setCustomValidity('');
+            }
+            reportIfBuyer(confirmPasswordInput);
+          }
+        });
+      }
+      if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', function() {
+          if (!signupPasswordInput) return;
+          if (confirmPasswordInput.value !== signupPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity('Passwords do not match');
+          } else {
+            confirmPasswordInput.setCustomValidity('');
+          }
+          reportIfBuyer(confirmPasswordInput);
+        });
+      }
+
+      function setButtonLoading(button, isLoading, loadingText) {
+        if (!button) return;
+        if (isLoading) {
+          button.dataset.originalText = button.innerHTML;
+          button.innerHTML = `<i class="ri-loader-4-line animate-spin mr-2"></i> ${loadingText}`;
+          button.disabled = true;
+        } else {
+          button.innerHTML = button.dataset.originalText || button.innerHTML;
+          button.disabled = false;
+        }
+      }
+
+      function mockSocialAuth(provider) {
+        return new Promise((resolve) => setTimeout(resolve, 1200));
+      }
+
+      function getWebmailUrl(email) {
+        const domain = (email.split('@')[1] || '').toLowerCase();
+        if (domain === 'gmail.com') return 'https://mail.google.com';
+        if (domain === 'yahoo.com' || domain === 'ymail.com') return 'https://mail.yahoo.com';
+        if (domain === 'outlook.com' || domain === 'hotmail.com' || domain === 'live.com') return 'https://outlook.live.com/mail';
+        if (domain === 'icloud.com' || domain === 'me.com' || domain === 'mac.com') return 'https://www.icloud.com/mail';
+        return `mailto:${email}`;
+      }
+
+      async function notifyEmailVerification(email) {
+        const message = `We sent a verification link to ${email}. Please check your inbox.`;
+        try {
+          if ('Notification' in window) {
+            if (Notification.permission === 'granted') {
+              new Notification('Verify your Agri-Kart account', { body: message });
+            } else if (Notification.permission !== 'denied') {
+              const perm = await Notification.requestPermission();
+              if (perm === 'granted') {
+                new Notification('Verify your Agri-Kart account', { body: message });
+              }
+            }
+          }
+        } catch {}
+        // Also offer to open their mail provider in a new tab
+        try {
+          const url = getWebmailUrl(email);
+          // Small delay so the toast appears first
+          setTimeout(() => { window.open(url, '_blank'); }, 400);
+        } catch {}
+      }
+
+      if (loginGoogleBtn) {
+        loginGoogleBtn.addEventListener('click', async function() {
+          setButtonLoading(loginGoogleBtn, true, 'Continuing...');
+          await mockSocialAuth('google');
+          setButtonLoading(loginGoogleBtn, false);
+          showNotification('Logged in with Google', 'success');
+        });
+      }
+      if (loginFacebookBtn) {
+        loginFacebookBtn.addEventListener('click', async function() {
+          setButtonLoading(loginFacebookBtn, true, 'Continuing...');
+          await mockSocialAuth('facebook');
+          setButtonLoading(loginFacebookBtn, false);
+          showNotification('Logged in with Facebook', 'success');
+        });
+      }
+      if (signupGoogleBtn) {
+        signupGoogleBtn.addEventListener('click', async function() {
+          setButtonLoading(signupGoogleBtn, true, 'Creating account...');
+          await mockSocialAuth('google');
+          setButtonLoading(signupGoogleBtn, false);
+          showNotification('Signed up with Google. Please verify your email.', 'success');
+        });
+      }
+      if (signupFacebookBtn) {
+        signupFacebookBtn.addEventListener('click', async function() {
+          setButtonLoading(signupFacebookBtn, true, 'Creating account...');
+          await mockSocialAuth('facebook');
+          setButtonLoading(signupFacebookBtn, false);
+          showNotification('Signed up with Facebook. Please verify your email.', 'success');
+        });
+      }
+
+      // Removed signed-in banner logic for this page
       
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        const loginUsername = document.getElementById('login-username').value.trim();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         
@@ -255,35 +488,85 @@
         submitButton.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i> Logging in...';
         submitButton.disabled = true;
         
-        // Simulate login
-        auth.login(email, password, userType)
-          .then(() => {
+        try {
+          // If email not registered, notify early
+          if (!isEmailRegistered(email)) {
+            showNotification('No account found for this email. Please sign up.', 'error');
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
-            // Redirect based on user type
-            if (userType === 'buyer') {
-              window.location.href = 'market.html';
-            } else {
-              window.location.href = 'dashboard.html';
+            return;
+          }
+
+          const usersRaw = localStorage.getItem('registeredUsers');
+          const users = usersRaw ? JSON.parse(usersRaw) : [];
+          const match = users.find(u => u.username === loginUsername && u.email === email && u.password === password && u.type === userType);
+          if (!match) {
+            showNotification('Incorrect username, email, or password', 'error');
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+            return;
+          }
+
+          // If the account was just registered, simulate verification reminder
+          // In a real app, check user.verified
+          try {
+            const maybeNeedsVerification = true;
+            if (maybeNeedsVerification) {
+              showNotification('Please verify your email before continuing. We can open your mail app now.', 'error');
+              notifyEmailVerification(email);
             }
-          })
-          .catch(error => {
-            showNotification('Login failed: ' + error.message, 'error');
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-          });
+          } catch {}
+
+          // simulate app login then redirect
+          auth.login(email, password, userType)
+            .then(() => {
+              submitButton.innerHTML = originalText;
+              submitButton.disabled = false;
+              if (userType === 'buyer') {
+                window.location.href = 'market.html';
+              } else {
+                window.location.href = 'dashboard.html';
+              }
+            })
+            .catch(error => {
+              showNotification('Login failed: ' + error.message, 'error');
+              submitButton.innerHTML = originalText;
+              submitButton.disabled = false;
+            });
+        } catch (err) {
+          showNotification('An unexpected error occurred. Please try again.', 'error');
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        }
       });
       
       signupForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
         const name = document.getElementById('name').value;
+        const signupUsername = document.getElementById('signup-username').value.trim();
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
+        const tosCheckbox = document.getElementById('tos');
         
+        // Duplicate email validation
+        if (isEmailRegistered(email)) {
+          showNotification('This email is already registered. Please use another email.', 'error');
+          const signupEmailInput = document.getElementById('signup-email');
+          if (signupEmailInput) {
+            signupEmailInput.setCustomValidity('Email already registered');
+            signupEmailInput.reportValidity();
+          }
+          return;
+        }
+
         if (password !== confirmPassword) {
           showNotification('Passwords do not match', 'error');
+          return;
+        }
+        if (!tosCheckbox.checked) {
+          showNotification('Please agree to the Terms and Privacy Policy', 'error');
           return;
         }
         
@@ -298,12 +581,23 @@
           .then(() => {
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
-            // Redirect based on user type
-            if (userType === 'buyer') {
-              window.location.href = 'market.html';
-            } else {
-              window.location.href = 'dashboard.html';
-            }
+            // save user for local validation
+            try {
+              const usersRaw = localStorage.getItem('registeredUsers');
+              const users = usersRaw ? JSON.parse(usersRaw) : [];
+              users.push({ username: signupUsername, name, email, password, type: userType });
+              localStorage.setItem('registeredUsers', JSON.stringify(users));
+            } catch {}
+            // Show verification prompt and open mail provider before redirecting
+            showNotification('Sign up successful. Please check your email to verify your account.', 'success');
+            notifyEmailVerification(email);
+            setTimeout(() => {
+              if (userType === 'buyer') {
+                window.location.href = 'market.html';
+              } else {
+                window.location.href = 'dashboard.html';
+              }
+            }, 1500);
           })
           .catch(error => {
             showNotification('Signup failed: ' + error.message, 'error');
