@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (type === "buyer") {
       router.push("/market")
     } else {
-      router.push("/dashboard")
+      router.push("/onboarding/seller")
     }
   }
 

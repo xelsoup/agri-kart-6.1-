@@ -184,7 +184,7 @@
 
               <div class="flex items-start space-x-2">
                 <input id="tos" type="checkbox" required class="mt-0.5">
-                <label for="tos" class="text-sm text-muted-foreground">I agree to the <a role="link" href="#" class="underline">Terms of Service</a> and <a role="link" href="#" class="underline">Privacy Policy</a>.</label>
+                <label for="tos" class="text-sm text-muted-foreground">I agree to the <a id="tos-link" role="link" href="#" class="underline">Terms of Service</a> and <a id="privacy-link" role="link" href="#" class="underline">Privacy Policy</a>.</label>
               </div>
 
               <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
@@ -315,6 +315,42 @@
       // Form submission
       const loginForm = document.getElementById('login-form');
       const signupForm = document.getElementById('signup-form');
+      const tosLink = document.getElementById('tos-link');
+      const privacyLink = document.getElementById('privacy-link');
+      // Terms links dialogs
+      function showInfoDialog(title, message) {
+        try {
+          const modal = document.createElement('div');
+          modal.className = 'fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50';
+          modal.innerHTML = `
+            <div role="dialog" aria-label="${title}" class="bg-white rounded-lg shadow-lg max-w-lg w-full">
+              <div class="border-b px-4 py-3 font-semibold">${title}</div>
+              <div class="px-4 py-3 text-sm text-slate-700">${message}</div>
+              <div class="px-4 pb-4 pt-2 flex justify-end">
+                <button id="dialog-close" class="inline-flex items-center rounded bg-green-600 text-white h-9 px-4">OK</button>
+              </div>
+            </div>`;
+          document.body.appendChild(modal);
+          modal.querySelector('#dialog-close').addEventListener('click', () => modal.remove());
+          modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        } catch {
+          alert(`${title}: ${message}`);
+        }
+      }
+
+      if (tosLink) {
+        tosLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          showInfoDialog('Terms of Service', 'By using Agri-Kart, you agree to comply with our marketplace rules, product listing guidelines, and dispute resolution process. This demo displays a simplified notice.');
+        });
+      }
+      if (privacyLink) {
+        privacyLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          showInfoDialog('Privacy Policy', 'We collect only the data necessary to operate the marketplace. Your verification files are stored securely and used for trust and safety checks. This is a demo notice.');
+        });
+      }
+
       const loginGoogleBtn = document.getElementById('login-google-btn');
       const loginFacebookBtn = document.getElementById('login-facebook-btn');
       const signupGoogleBtn = document.getElementById('signup-google-btn');
@@ -566,7 +602,11 @@
           return;
         }
         if (!tosCheckbox.checked) {
-          showNotification('Please agree to the Terms and Privacy Policy', 'error');
+          showNotification('Please agree to the Terms of Service and Privacy Policy before proceeding.', 'error');
+          try {
+            tosCheckbox.focus();
+            tosCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } catch {}
           return;
         }
         
@@ -595,7 +635,8 @@
               if (userType === 'buyer') {
                 window.location.href = 'market.html';
               } else {
-                window.location.href = 'dashboard.html';
+                // Send sellers to onboarding for verification
+                window.location.href = 'onboarding-seller.html';
               }
             }, 1500);
           })

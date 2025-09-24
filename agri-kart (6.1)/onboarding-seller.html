@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Onboarding | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col bg-white text-slate-900">
+  <main class="flex-1">
+    <div class="container mx-auto max-w-3xl py-10 px-4">
+      <h1 class="text-2xl font-bold mb-2">Seller Onboarding</h1>
+      <p class="text-sm text-slate-500 mb-6">Provide verification to prove you are a legitimate farmer. This helps keep the marketplace safe.</p>
+
+      <div id="steps" class="grid grid-cols-4 gap-2 mb-6 text-xs">
+        <div id="step-pill-1" class="rounded border bg-green-600 text-white px-2 py-1">Step 1</div>
+        <div id="step-pill-2" class="rounded border bg-slate-100 px-2 py-1">Step 2</div>
+        <div id="step-pill-3" class="rounded border bg-slate-100 px-2 py-1">Step 3</div>
+        <div id="step-pill-4" class="rounded border bg-slate-100 px-2 py-1">Step 4</div>
+      </div>
+
+      <section id="step-1" class="rounded-lg border p-6 space-y-4">
+        <h2 class="font-semibold">Farm Details</h2>
+        <div>
+          <label class="text-sm block mb-1" for="farm-name">Farm Name</label>
+          <input id="farm-name" class="w-full border rounded px-3 py-2" placeholder="Green Valley Farms">
+        </div>
+        <div>
+          <label class="text-sm block mb-1" for="farm-location">Farm Location</label>
+          <input id="farm-location" class="w-full border rounded px-3 py-2" placeholder="City, Region">
+        </div>
+        <div>
+          <label class="text-sm block mb-1" for="produce-type">Primary Produce</label>
+          <input id="produce-type" class="w-full border rounded px-3 py-2" placeholder="Tomatoes, Corn">
+        </div>
+        <div>
+          <label class="text-sm block mb-1" for="farm-address">Physical Farm Address</label>
+          <input id="farm-address" class="w-full border rounded px-3 py-2" placeholder="Street, City, State/Region, Postal Code">
+        </div>
+        <div class="flex justify-end">
+          <button id="continue-1" class="inline-flex items-center rounded bg-green-600 text-white px-4 py-2 disabled:opacity-50">Continue</button>
+        </div>
+      </section>
+
+      <section id="step-2" class="rounded-lg border p-6 space-y-4 hidden">
+        <h2 class="font-semibold">Upload Verification Documents</h2>
+        <p class="text-xs text-slate-500">Accepted formats: PDF, JPG, PNG, MP4. Max ~10MB each.</p>
+        <div>
+          <label class="text-sm block mb-1">Government-Issued ID</label>
+          <input id="gov-id" type="file" accept="image/*,application/pdf" class="w-full">
+        </div>
+        <div>
+          <label class="text-sm block mb-1">Farm Registration or License</label>
+          <input id="farm-reg" type="file" accept="image/*,application/pdf" class="w-full">
+        </div>
+        <div>
+          <label class="text-sm block mb-1">Proof of Land Ownership or Lease</label>
+          <input id="land-proof" type="file" accept="image/*,application/pdf" class="w-full">
+        </div>
+        <div>
+          <label class="text-sm block mb-1">Agricultural Certification (optional)</label>
+          <input id="agri-cert" type="file" accept="image/*,application/pdf" class="w-full">
+        </div>
+        <div>
+          <label class="text-sm block mb-1">Photo or Video of Farm</label>
+          <input id="farm-media" type="file" accept="image/*,video/*" class="w-full">
+        </div>
+        <div>
+          <label class="text-sm block mb-1" for="tax-id">Business/Tax ID</label>
+          <input id="tax-id" class="w-full border rounded px-3 py-2" placeholder="9-digit EIN" inputmode="numeric" maxlength="9" pattern="\\d{9}">
+          <p class="text-xs text-slate-500 mt-1">If provided, must be exactly 9 digits (EIN format).</p>
+        </div>
+        <div class="flex justify-between">
+          <button id="back-2" class="inline-flex items-center rounded border px-4 py-2">Back</button>
+          <button id="continue-2" class="inline-flex items-center rounded bg-green-600 text-white px-4 py-2 disabled:opacity-50">Continue</button>
+        </div>
+      </section>
+
+      <section id="step-3" class="rounded-lg border p-6 space-y-4 hidden">
+        <h2 class="font-semibold">References</h2>
+        <p class="text-xs text-slate-500">Provide a contact who can verify your farm (e.g., extension officer or verified farmer).</p>
+        <div>
+          <label class="text-sm block mb-1" for="ref-name">Reference Name</label>
+          <input id="ref-name" class="w-full border rounded px-3 py-2" placeholder="Jane Doe">
+        </div>
+        <div>
+          <label class="text-sm block mb-1" for="ref-contact">Reference Contact</label>
+          <input id="ref-contact" class="w-full border rounded px-3 py-2" placeholder="Email or Phone">
+        </div>
+        <div class="flex justify-between">
+          <button id="back-3" class="inline-flex items-center rounded border px-4 py-2">Back</button>
+          <button id="continue-3" class="inline-flex items-center rounded bg-green-600 text-white px-4 py-2 disabled:opacity-50">Continue</button>
+        </div>
+      </section>
+
+      <section id="step-4" class="rounded-lg border p-6 space-y-4 hidden">
+        <h2 class="font-semibold">Verify Email</h2>
+        <p class="text-xs text-slate-500">We will send a code to confirm your email address.</p>
+        <div>
+          <label class="text-sm block mb-1" for="email-code">Email Code</label>
+          <div class="flex gap-2">
+            <input id="email-code" class="w-full border rounded px-3 py-2" placeholder="4-6 digit code">
+            <button id="verify-continue" class="rounded border px-3 py-2">Send Code</button>
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <button id="back-4" class="inline-flex items-center rounded border px-4 py-2">Back</button>
+          
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const stepPills = [
+      document.getElementById('step-pill-1'),
+      document.getElementById('step-pill-2'),
+      document.getElementById('step-pill-3'),
+      document.getElementById('step-pill-4')
+    ];
+    function setStep(current) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`step-${i}`).classList.toggle('hidden', i !== current);
+        stepPills[i-1].classList.toggle('bg-green-600', i === current);
+        stepPills[i-1].classList.toggle('text-white', i === current);
+        stepPills[i-1].classList.toggle('bg-slate-100', i !== current);
+      }
+    }
+    function btnLoading(btn, isLoading, text) {
+      if (!btn) return;
+      if (isLoading) {
+        btn.dataset.originalText = btn.innerHTML;
+        btn.innerHTML = `<i class=\"ri-loader-4-line animate-spin mr-2\"></i> ${text}`;
+        btn.disabled = true;
+      } else {
+        btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+        btn.disabled = false;
+      }
+    }
+
+    // Step 1 validation
+    document.getElementById('continue-1').addEventListener('click', () => {
+      const a = document.getElementById('farm-name').value.trim();
+      const b = document.getElementById('farm-location').value.trim();
+      const c = document.getElementById('produce-type').value.trim();
+      const d = document.getElementById('farm-address').value.trim();
+      if (!a || !b || !c || !d) return;
+      setStep(2);
+    });
+
+    // Step 2 validation
+    document.getElementById('back-2').addEventListener('click', () => setStep(1));
+    document.getElementById('continue-2').addEventListener('click', () => {
+      const id = document.getElementById('gov-id').files?.length;
+      const reg = document.getElementById('farm-reg').files?.length;
+      const land = document.getElementById('land-proof').files?.length;
+      const media = document.getElementById('farm-media').files?.length;
+      if (!id || !reg || !land || !media) return;
+      // Validate optional EIN if present
+      const taxId = document.getElementById('tax-id').value.trim();
+      if (taxId && !/^\d{9}$/.test(taxId)) {
+        document.getElementById('tax-id').focus();
+        return;
+      }
+      setStep(3);
+    });
+
+    // Step 3 validation
+    document.getElementById('back-3').addEventListener('click', () => setStep(2));
+    document.getElementById('continue-3').addEventListener('click', () => {
+      const n = document.getElementById('ref-name').value.trim();
+      const c = document.getElementById('ref-contact').value.trim();
+      if (!n || !c) return;
+      setStep(4);
+    });
+
+    // Step 4 verification
+    let emailSent = false;
+    const verifyBtn = document.getElementById('verify-continue');
+    let verifyStage = 'send'; // 'send' -> 'verify'
+    document.getElementById('back-4').addEventListener('click', () => setStep(3));
+    verifyBtn.addEventListener('click', () => {
+      if (verifyStage === 'send') {
+        btnLoading(verifyBtn, true, 'Sending...');
+        setTimeout(() => {
+          emailSent = true;
+          btnLoading(verifyBtn, false);
+          verifyStage = 'verify';
+          verifyBtn.textContent = 'Verify & Go to Dashboard';
+          verifyBtn.classList.remove('border');
+          verifyBtn.classList.add('bg-green-600','text-white');
+        }, 800);
+        return;
+      }
+      const ec = document.getElementById('email-code').value.trim();
+      if (!emailSent || ec.length < 4) return;
+      btnLoading(verifyBtn, true, 'Finishing...');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    });
+
+    // Start at step 1
+    setStep(1);
+  </script>
+</body>
+</html>
+
+
