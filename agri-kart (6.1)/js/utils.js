@@ -144,12 +144,13 @@ const auth = {
     this.user = null
     localStorage.removeItem("user")
     this.updateAuthUI()
-    window.location.href = "index.html"
+    window.location.href = "auth.html"
   },
 
   updateAuthUI() {
     const authButtons = document.querySelectorAll(".auth-button")
     const userMenus = document.querySelectorAll(".user-menu")
+    const userButtons = document.querySelectorAll(".user-buttons")
 
     if (this.user) {
       authButtons.forEach((button) => {
@@ -157,11 +158,13 @@ const auth = {
       })
 
       userMenus.forEach((menu) => {
-        menu.classList.remove("hidden")
-        const nameElement = menu.querySelector(".user-name")
-        if (nameElement) {
-          nameElement.textContent = this.user.name
-        }
+        menu.classList.add("hidden")
+      })
+
+      userButtons.forEach((container) => {
+        container.classList.remove("hidden")
+        const nameEl = container.querySelector(".user-name")
+        if (nameEl) nameEl.textContent = this.user.name
       })
     } else {
       authButtons.forEach((button) => {
@@ -170,6 +173,9 @@ const auth = {
 
       userMenus.forEach((menu) => {
         menu.classList.add("hidden")
+      })
+      userButtons.forEach((container) => {
+        container.classList.add("hidden")
       })
     }
   },

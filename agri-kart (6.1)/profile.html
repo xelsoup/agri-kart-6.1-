@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | Agri-Kart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="flex min-h-screen flex-col">
+  <div id="header-container"></div>
+
+  <main class="flex-1">
+    <div class="container py-8">
+      <h1 class="text-2xl font-bold mb-6">User Profile</h1>
+      <div id="profile-card" class="max-w-xl rounded-lg border bg-card p-6">
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <i class="ri-user-line"></i>
+            <span class="text-sm text-muted-foreground">Name</span>
+          </div>
+          <div id="profile-name" class="text-lg font-medium">-</div>
+
+          <div class="mt-4 flex items-center gap-2">
+            <i class="ri-mail-line"></i>
+            <span class="text-sm text-muted-foreground">Email</span>
+          </div>
+          <div id="profile-email" class="text-lg font-medium">-</div>
+
+          <div class="mt-4 flex items-center gap-2">
+            <i class="ri-id-card-line"></i>
+            <span class="text-sm text-muted-foreground">Type</span>
+          </div>
+          <div id="profile-type" class="text-lg font-medium">-</div>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <button onclick="window.location.href='market.html'" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4">
+            Back to Market
+          </button>
+          <button onclick="auth.logout()" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4">
+            Log out
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('components/header.html').then(r=>r.text()).then(html=>{
+        document.getElementById('header-container').innerHTML = html
+      })
+      fetch('components/footer.html').then(r=>r.text()).then(html=>{
+        document.getElementById('footer-container').innerHTML = html
+      })
+
+      // Require auth and populate profile
+      if (!auth.user) {
+        // utils.js init runs after DOMContentLoaded, so check again shortly if needed
+        setTimeout(loadProfile, 50)
+      } else {
+        loadProfile()
+      }
+
+      function loadProfile() {
+        if (!auth.user) {
+          window.location.href = 'auth.html'
+          return
+        }
+        document.getElementById('profile-name').textContent = auth.user.name
+        document.getElementById('profile-email').textContent = auth.user.email
+        document.getElementById('profile-type').textContent = auth.user.type
+      }
+    })
+  </script>
+</body>
+</html>
+
+

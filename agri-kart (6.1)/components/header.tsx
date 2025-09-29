@@ -7,11 +7,21 @@ import { Button } from "@/components/ui/button"
 import { useCart } from "@/components/cart-provider"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/components/auth-provider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Header() {
   const pathname = usePathname()
   const { totalItems } = useCart()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user, logout } = useAuth()
 
   const isActive = (path: string) => pathname === path
 
@@ -73,12 +83,32 @@ export function Header() {
             )}
           </Link>
 
-          <Link href="/auth">
-            <Button variant="outline" size="sm" className="hidden md:flex">
-              <User className="mr-2 h-4 w-4" />
-              Sign In
-            </Button>
-          </Link>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="hidden md:flex">
+                  <User className="mr-2 h-4 w-4" />
+                  {user.name || "Profile"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Signed in as {user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={user.type === "buyer" ? "/market" : "/dashboard"}>Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/auth">
+              <Button variant="outline" size="sm" className="hidden md:flex">
+                <User className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
+            </Link>
+          )}
 
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -127,12 +157,34 @@ export function Header() {
             >
               Contact
             </Link>
-            <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full">
-                <User className="mr-2 h-4 w-4" />
-                Sign In
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  href={user.type === "buyer" ? "/market" : "/dashboard"}
+                  className="block py-2 text-sm font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Profile
+                </Link>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    logout()
+                  }}
+                >
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full">
+                  <User className="mr-2 h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       )}
